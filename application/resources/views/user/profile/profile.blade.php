@@ -1,0 +1,190 @@
+@extends('layouts/layout')
+@section('content')
+<div class="row">
+    <!-- <div class="col-md-2">
+        <div class="left-sidebar">
+            <div>
+                <ul>
+                    <li> <a href="{{ route('dashboard') }}"><span class="icons icon-arrow-left"></span> Dashboard</a></li>
+                    <li><a href="{{ route('profile') }}"><span class="icons icon-arrow-left"></span>Applicant’s Profile</a></li>
+                </ul>
+            </div>
+        </div>
+    </div> -->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab">
+        <div class="bhoechie-tab-content active">
+            <div class="form-scroll">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="profile-head">
+                            <div class="tab-content profile-tab" id="myTabContent">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    <div class="row">
+                                        <div class="col-md-12" id="prodiv">
+                                            <div class="table-responsive">
+                                                <table id="dataTable" class="table table-bordered" border="1" style="border-collapse: collapse; width: 100%;">
+                                                    <tr>
+                                                        <td colspan="5" class="bg-light">
+                                                            <strong>Basic Details/सामान्य विवरण</strong>
+                                                        </td>
+                                                        <td class="bg-light">
+                                                            @if($form_check == 0)
+                                                            <a href="{{ url('profile_detail') }}"><span class="btn btn-primary">Edit Profile Detail</span></a>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Name<br>नाम</b></td>
+                                                        <td>{{$user->fullname}}</td>
+                                                        <td><b>Date of Birth<br>जन्म तिथि</b></td>
+                                                        <td> @if($user->dob !==""){{$user->dob}} @endif</td>
+                                                        <td colspan="2" rowspan="5" style="text-align: center;">
+                                                            <div class="mb-2">
+                                                                <p class="text-start text-dark">Photo/फोटो</p>
+                                                                @if($user->photograph_doc !='')
+                                                                <img src="{{url('storage/award',$user->photograph_doc)}}" style="width: 130px; height: 140px;">
+                                                                @else
+                                                                <strong class="btn btn-danger btn-xs"> Not Uploaded</strong>
+                                                                @endif
+                                                            </div>
+                                                            <div>
+                                                                <p class="text-start text-dark">Signature/हस्ताक्षर</p>
+                                                                @if($user->signature_doc !='')
+                                                                <img src="{{url('storage/award',$user->signature_doc)}}" style="width: 130px; height: 40px;">
+                                                                @else
+                                                                <strong class="btn btn-danger btn-xs"> Not Uploaded</strong>
+                                                                @endif
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Birth Place<br>जन्म स्थान</b></td>
+                                                        <td>{{districtName($user->place_of_birth)}}</td>
+                                                        <td><b>Gender<br>लिंग</b></td>
+                                                        <td>{{$user->gender}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Aadhaar Number<br>आधार कार्ड</b></td>
+                                                        <td>{{$user->aadhar_no}}</td>
+                                                        <td><b>Marital status<br>वैवाहिक स्थिति</b></td>
+                                                        <td>{{$user->marital_status}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Mobile Number<br>मोबाइल नंबर</b></td>
+                                                        <td>{{$user->mobile}}</td>
+                                                        <td><b>Email ID<br>ईमेल आईडी</b></td>
+                                                        <td>{{$user->email}}</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Nationality<br>राष्ट्रीयता</b></td>
+                                                        <td>{{$user->nationality}}</td>
+                                                        <td><b>Sports Name<br>खेल का नाम</b></td>
+                                                        <td>{{sport_name($user->sport_type)}}</td>
+                                                        
+                                                    </tr>
+                                                    <tr>
+                                                        @if($user->sport_type == 52)
+                                                        <td><b>Para Sports Name <br> पैरा स्पोर्ट्स का नाम</b></td>
+                                                        <td>{{$user->para_sport}}</td>
+                                                        @endif
+                                                        <!-- <td><b>Religion<br>धर्म</b></td>
+                                                    <td>{{$user->religion}}</td> -->
+                                                        <td><b>Father’s Name<br>पिता का नाम</b></td>
+                                                        <td>{{$user->father_name}}</td>
+                                                        <td><b>Mother’s Name<br>माता का नाम</b></td>
+                                                        <td>{{$user->mother_name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Domicile of Uttar Pradesh<br>उत्तर प्रदेश का अधिवास<b></td>
+                                                        <td>{{$user->native_of_up=='1'?'YES':'NO'}}</td>
+                                                        <td><b>Is Applicant Physically Challenged ?<br>क्या आवेदक शारीरिक रूप से अक्षम है?<b></td>
+                                                        <td>{{$user->is_phy_handicapped=='1'?'YES':'NO'}}</td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="6" class="bg-light">
+                                                            <strong>Communication Details/संचार विवरण</strong>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Permanent Address<br>स्थायी का पता</b></td>
+                                                        <td colspan="5">{{$user->permanent_address}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>State<br>राज्य</b></td>
+                                                        <td>Uttar Pradesh</td>
+                                                        <td><b>District<br>जनपद</b></td>
+                                                        <td>{{ districtName($user->permanent_district)}}</td>
+                                                        <td><b>Pin Code</b></td>
+                                                        <td>{{$user->permanent_pincode}}</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><b>Correspondence Address<br>पत्राचार का पता</b></td>
+                                                        <td colspan="5">{{$user->present_address}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>State<br>राज्य</b></td>
+                                                        <td>{{stateName($user->present_state)}}</td>
+                                                        <td><b>District<br>जनपद</b></td>
+                                                        <td>{{districtName($user->present_district)}}</td>
+                                                        <td><b>Pin Code</b></td>
+                                                        <td>{{$user->present_pincode}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="6" class="bg-light">
+                                                            <strong>Documents Details/दस्तावेजों का विवरण</strong>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Aadhaar<br>आधार</td>
+                                                        <td>
+                                                            @if($user->aadhar_doc !='')
+                                                            <a class="btn btn-success btn-xs" href="{{url('storage/award',$user->aadhar_doc)}}" target="_blank">
+                                                                <span>View</span>
+                                                            </a>
+                                                            @else
+                                                            <strong class="btn btn-danger btn-xs"> Not Uploaded</strong>
+                                                            @endif
+                                                        </td>
+                                                        @if($user->is_phy_handicapped ==1)
+                                                        <td>Medical Certificate<br>चिकित्सा प्रमाणपत्र </td>
+                                                        <td>
+
+                                                            <a class="btn btn-success btn-xs" href="{{url('storage/award',$user->phy_handi_docs)}}" target="_blank">
+                                                                <span>View</span>
+                                                            </a>
+
+
+                                                        </td>
+                                                        @endif
+                                                        <td>Birth Certificate<br>जन्म प्रमाण पत्र</td>
+                                                        <td>
+                                                            @if($user->birth_certificate !='')
+                                                            <a class="btn btn-success btn-xs" href="{{url('storage/award',$user->birth_certificate)}}" target="_blank">
+                                                                <span>View</span>
+                                                            </a>
+                                                            @else
+                                                            <strong class="btn btn-danger btn-xs"> Not Uploaded</strong>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+@endsection

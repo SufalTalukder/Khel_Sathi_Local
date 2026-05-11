@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Prevent looping by checking if request is already in public directory
+    RewriteCond %{REQUEST_URI} !public/
+
+    # If the file exists in the public folder, serve it immediately
+    RewriteCond %{DOCUMENT_ROOT}/application/public/$1 -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/application/public/$1 -d
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Otherwise, pass everything else to public/index.php
+    RewriteRule ^(.*)$ public/index.php [L]
+</IfModule>

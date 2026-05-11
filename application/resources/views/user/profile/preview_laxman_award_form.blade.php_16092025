@@ -1,0 +1,480 @@
+@extends( 'layouts/layout' )
+@section( 'content' )
+
+<div class="container">
+	<div class="pageheader">
+		<h4 class="mb-0">Application Preview/एप्लिकेशन पूर्वावलोकन
+			<a href="{{ route('dashboard') }}" class="btn btn-sm  btn-outline-dark ms-2 float-end "><span class="icons icon-arrow-left"></span> Dashboard</a>
+			@if(isset($articles[0]) && $articles[0]->final_submit == 1)
+			<button type="button" data-print="modal" class="btn btn-sm  btn-outline-primary ms-2 float-end " onclick="PrintDoc()" style="width: auto;"><span class="icons icon-printer"></span></button>
+			@endif
+		</h4>
+	</div>
+	<div id="prodiv">
+		<div class="p-3 bg-white">
+			<table class="dn" style="width: 100%; margin-bottom: 5px;" border="0">
+				<tr>
+					<td colspan="2" align="center" style="position: relative; border: 0; padding-bottom: 5px;">
+						<div style="border-bottom: 0px solid #000; padding-bottom: 2vw;">
+							 <img id="logo" src="{{ url('/public') }}/assets_admin/images/logo.png" style="display:none;position: absolute; width: 70px; top: -7px; left: 0;"/> 
+							<div style="font-size: 25px; font-weight: bold;">
+								<!-- Department of Sports -->
+								Khel Sathi Portal / खेल साथी पोर्टल
+							</div>
+							<div style="font-size: 18px; font-weight: bold;">
+								Government of Uttar Pradesh/उत्तर प्रदेश सरकार
+							</div>
+							<div style="font-size: 18px; font-weight: bold;">Application for Nomination for Laxman Award/लक्ष्मण पुरस्कार के लिए नामांकन हेतु आवेदन </div>
+						</div>
+					</td>
+				</tr>
+			</table>
+			@foreach($articles as $article)
+			<p class="bg-light" @if($article->final_submit != 1) style="display: none" @endif >
+				<strong>Application no. / आवेदन संख्या -</strong> <b id="application_no">{{$article->application_no}}</b>
+			</p>
+			<p @if($article->amount_release_status != 1) style="display: none" @endif class="bg-light"><strong>Amount Released/धनराशि :-</strong> <b>{{$article->amount_release}}</b></p>
+
+			<table id="dataTable" class="table table-bordered" border="1" style="border-collapse: collapse; width: 100%;">
+				<tr>
+					<td colspan="6" class="bg-light">
+						<strong>Basic Details/सामान्य विवरण</strong>
+					</td>
+				</tr>
+				<tr>
+					<td><b>Applicant's Full Name<br>आवेदक का पूरा नाम</b>
+					</td>
+					<td>{{$article->fullname}}</td>
+					<td><b>Which Sport did/do you play?<br>कौन सा खेल खेलते थे/हैं?</b>
+					</td>
+					<td>{{$article->sport_name}}</td>
+					<td colspan="2" rowspan="4"><b>Applicant’s Photo<br>आवेदक की फोटो</b><br />
+						<div class="text-center" style="padding: 5px;" align="center">
+							<img src="{{URL::asset('storage/app/public/award/').'/'.$article->photograph_doc}}" class="img-fluid" style="width: 110px; height: 120px;" />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td><b>Mobile Number<br>मोबाइल नंबर</b>
+					</td>
+					<td>{{$article->mobile}}</td>
+					<td><b>Email ID<br>ईमेल आईडी</b>
+					</td>
+					<td>{{$article->email}}</td>
+				</tr>
+				<tr>
+					<td colspan="4" class="bg-light">
+						<strong>Applicant's Details/आवेदक का विवरण</strong>
+					</td>
+				</tr>
+				<tr>
+					<td><b>Date of Birth<br>जन्म तिथि</b>
+					</td>
+					<td>{{$article->dob}}</td>
+					<td><b>Place of Birth<br>जन्म स्थान</b>
+					</td>
+					<td>{{districtName($article->place_of_birth)}}</td>
+				</tr>
+				<tr>
+					<td><b>Mother’s Name<br>माता का नाम</b>
+					</td>
+					<td>{{$article->mother_name}}</td>
+					<td><b>Father’s Name<br>पिता का नाम</b>
+					</td>
+					<td>{{$article->father_name}}</td>
+					<td><b>Gender<br>लिंग</b>
+					</td>
+					<td>{{$article->gender}}</td>
+				</tr>
+				<tr>
+					<td colspan="2"><b>Highest Educational Qualification<br>उच्चतम शैक्षणिक योग्यता</b>
+					</td>
+					<td colspan="4">
+						@if($article->qualification == '10') 10th / High School @elseif($article->qualification == '12') 12th / Intermediate @elseif($article->qualification == 'graduation') Graduation @elseif($article->qualification == 'post_graduation') Post-Graduation @elseif($article->qualification == 'master_degree') Master Degree @elseif($article->qualification == 'phd') PhD @else Other @endif
+					</td>
+				</tr>
+				<tr>
+					@if($article->highschool_certificate !='')
+					<td><b>Highschool/Matriculation Certificate<br>हाईस्कूल/मैट्रिकुलेशन प्रमाणपत्र</b>
+					</td>
+					<td>
+						@php $img = url('storage/app/public/laxman_award').'/'.$article->highschool_certificate; $img1 = url('public/images/images.svg'); $doc = explode('.',$article->highschool_certificate); if($doc[1]=='pdf') $img1 = url('public/images/pdf.svg'); @endphp
+						<img role="button" src="{{$img1}}" onclick="appendImage('{{$img}}','{{$doc[1]}}')" class="img-fluid img-query" />
+					</td>
+					@endif
+				</tr>
+				<tr>
+					<td colspan="6" class="bg-light">
+						<strong>Current Address/वर्तमान पता</strong>
+					</td>
+				</tr>
+				<tr>
+					{{-- <td><b>Flat No. / House No.<br>फ्लैट संख्या / मकान संख्या</b>
+					</td>
+					<td>{{$article->present_flat_no}}</td> --}}
+					<td><b>Complete Address<br>पूरा पता</b>
+					</td>
+					<td colspan="3">{{$article->present_address}}</td>
+					<td><b>District<br>जनपद</b>
+					</td>
+					<td>{{districtName($article->present_district)}}</td>
+				</tr>
+				<tr>
+					<td><b>State<br>राज्य</b>
+					</td>
+					<td>{{stateName($article->present_state)}}</td>
+					<td><b>Pin Code<br>पिन कोड</b>
+					</td>
+					<td colspan="5">{{($article->present_pincode )}}</td>
+				</tr>
+				<tr>
+					<td colspan="6" class="bg-light">
+						<strong>Permanent Address/स्थायी पता</strong>
+					</td>
+				</tr>
+				<tr>
+					{{-- <td><b>Flat No. / House No.<br>फ्लैट संख्या / मकान संख्या</b>
+					</td>
+					<td>{{$article->permanent_flat_no}}</td> --}}
+					<td><b>Complete Address<br>पूरा पता</b>
+					</td>
+					<td colspan="3">{{$article->permanent_address}}</td>
+					<td><b>District<br>जनपद</b>
+					</td>
+					<td>{{districtName($article->permanent_district)}}</td>
+					
+				</tr>
+				<tr>
+				<td><b>State<br>राज्य</b>
+					</td>
+					<td>Uttar Pradesh</td>
+					<td><b>Pin Code<br>पिन कोड</b>
+					</td>
+					<td colspan="5">{{($article->permanent_pincode )}}</td>
+				</tr>
+				<tr>
+					<td colspan="6" class="bg-light">
+						<strong>Bank Details/बैंक खाते का विवरण</strong>
+					</td>
+				</tr>
+				<tr>
+					<td><b>Name of Bank<br>बैंक का नाम</b>
+					</td>
+					<td>{{$article->bank_name}}</td>
+					<td><b>Branch<br>शाखा</b>
+					</td>
+					<td>{{$article->bank_branch}}</td>
+					<td><b>Bank Account No.<br>बैंक खाता संख्या</b>
+					</td>
+					<td>{{$article->bank_acc_no}}</td>
+				</tr>
+				<tr>
+					<td><b>IFSC<br>आईएफएससी</b>
+					</td>
+					<td>{{$article->bank_ifsc}}</td>
+					<td><b>Account Holder Name<br>खाता धारक का नाम</b>
+					</td>
+					<td>{{$article->acc_holder_name}}</td>
+					<td><b>PAN<br>पैन कार्ड</b>
+					</td>
+					<td>{{$article->pan}}</td>
+				</tr>
+				<tr>
+					<td colspan="2"><b>Mobile No. (registered with Bank Account)<br>मोबाइल नंबर (बैंक खाते के साथ जो पंजीकृत है)</b>
+					</td>
+					<td>{{$article->mobile_registered_in_bank}}</td>
+					<td colspan="2"><b>Any other relevant information applicant wants to specify?<br>कोई अन्य प्रासंगिक जानकारी आवेदक निर्दिष्ट करना चाहते हैं?</b>
+					</td>
+					<td>{{$article->other_relevant_information_applicant}}</td>
+				</tr>
+				<tr>
+					<td colspan="6" class="bg-light">
+						<strong>Sports Achievements/खेल क्षेत्र में उपलब्धियां</strong>
+					</td>
+				</tr>
+				@foreach($sport_achievement as $item)
+				<tr>
+					<td><b>Sports Competition Name <br>खेलकूद प्रतियोगिता का नाम</b>
+					</td>
+					<td>{{$item->name}}</td>
+					<td><b>Sport Name<br>खेल का नाम</b>
+					</td>
+					<td>{{sport_name($item->sport_achievement_name)}}</td>
+					<td><b>Position / Medal<br>पद का नाम / पदक</b>
+					</td>
+					<td>{{$item->sport_achievement_position}}</td>
+				</tr>
+				<tr>
+					<td><b>Period of Competition<br>प्रतियोगिता की अवधि</b>
+					</td>
+					<td><b>From :-</b> {{$item->competition_from_date}} </br><b> To :-</b> {{$item->competition_to_date}}</td>
+					<td><b>Place<br>स्थान</b>
+					</td>
+					<td>{{$item->sport_achievement_State_Institution}}</td>
+					<td><b>Documents<br>दस्तावेज</b>
+					</td>
+					<td>
+						
+						@if($item->sport_achievement_docs !='')
+						<a download href="{{url('storage/app/public/laxman_award',$item->sport_achievement_docs)}}" target="_blank">
+							<!-- <span class="btn btn-success btn-xs">Uploaded</span> -->
+							<i class="fa fa-download"></i>
+						</a>
+						@else
+						<strong class="btn btn-danger btn-xs"> Not Uploaded</strong> @endif
+					</td>
+				</tr>
+				<tr>
+					<td><strong>Sport Event Detail/खेलकूद प्रतियोगिता का विवरण</strong></td>
+					<td>{{$item->event_details}}</td>
+				</tr>
+				@endforeach
+				<tr>
+					<td colspan="6" class="bg-light">
+						<strong>Other Achievements/अन्य उपलब्धियां</strong>
+					</td>
+				</tr>
+				@foreach($other_achievement as $item)
+				<tr>
+					<td><b>Name of the Achievement<br>उपलब्धि का नाम</b>
+					</td>
+					<td>{{$item->achievement_name}}</td>
+					<td><b>Documents<br>दस्तावेज</b>
+					</td>
+					<td colspan="3">
+						@if($item->achievement_docs !='')
+
+						<a download href="{{url('storage/app/public/laxman_award',$item->achievement_docs)}}" target="_blank">
+							<!-- <span class="btn btn-success btn-xs">Uploaded</span> -->
+							<i class="fa fa-download"></i>
+						</a>
+						@else
+						<strong class="btn btn-danger btn-xs"> Not Uploaded</strong> @endif
+					</td>
+				</tr>
+				@endforeach
+				<tr>
+					<td colspan="6" class="bg-light"><strong>Documents/दस्तावेज़</strong>
+					</td>
+				</tr>
+				<tr>
+					<td><b>Certificate of Highest Educational Qualification<br>उच्चतम शैक्षणिक योग्यता का प्रमाणपत्र अपलोड करें</b>
+					</td>
+					<td>
+						@if($article->qualification_doc !='')
+						<a download href="{{url('storage/app/public/award',$article->qualification_doc)}}" target="_blank">
+							<!-- <span class="btn btn-success btn-xs">Uploaded</span> -->
+							<i class="fa fa-download"></i>
+
+						</a>
+						@else
+						<strong class="btn btn-danger btn-xs">Not Uploaded</strong> @endif
+					</td>
+					<td><b>Domicile Certificate of UP<br>उत्तर प्रदेश का मूल निवास प्रमाण पत्र अपलोड करें</b>
+					</td>
+					<td>
+						@if($article->domicile_certificate !='')
+						<a download href="{{url('storage/app/public/laxman_award',$article->domicile_certificate)}}" target="_blank">
+							<!-- <span class="btn btn-success btn-xs">Uploaded</span> -->
+							<i class="fa fa-download"></i>
+						</a>
+						@else
+						<strong class="btn btn-danger btn-xs">Not Uploaded</strong> @endif
+					</td>
+					@if($article->highschool_certificate !='')
+					<td><b>Highschool/Matriculation Certificate<br>हाईस्कूल/मैट्रिकुलेशन प्रमाणपत्र</b>
+					</td>
+					<td>
+						<a download href="{{url('storage/app/public/laxman_award',$article->highschool_certificate)}}" target="_blank">
+							<!-- <span class="btn btn-success btn-xs">Uploaded</span> -->
+							<i class="fa fa-download"></i>
+						</a>
+					</td>
+					@endif
+					<!--  no column-->
+					<!-- <td><b>Association approved certificate<br>एसोसिएशन द्वारा अनुमोदित प्रमाणपत्र !</b>
+					</td>
+					<td>
+						@if($article->association_certificate_upload !='')
+						<a href="{{url('storage/app/public/award',$article->association_certificate_upload)}}" target="_blank">
+							<span class="btn btn-success btn-xs">Uploaded</span>
+						</a>
+						@else
+						<strong class="btn btn-danger btn-xs">Not Uploaded</strong> @endif
+					</td> -->
+				</tr>
+				<tr>
+					<td colspan="6" class="bg-light">
+						<strong>Declaration/घोषणा </strong>
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<input class="dope_test" name="dope_test" {{ ($article->final_submit == 1 ? 'disabled' : '') }} {{ ($article->dope_test == 1 ? 'checked' : '') }} value="1" required type="radio" /> &nbsp; <b>Yes/हां</b>
+					</td>
+					<td align="center">
+						<input class="dope_test" name="dope_test" value="2" {{ ($article->final_submit == 1 ? 'disabled' : '') }} {{ ($article->dope_test == 2 ? 'checked' : '') }} type="radio" /> &nbsp; <b>No/नहीं</b>
+					</td>
+					<td colspan="4">Have you ever been convicted for consuming drugs during any Competition/Championship?<br>क्या आपको कभी किसी प्रतियोगिता/चैंपियनशिप के दौरान नशीली दवाओं के सेवन के लिए दोषी ठहराया गया है?</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<input name="court_case" value="1" {{ ($article->final_submit == 1 ? 'disabled' : '') }} {{ ($article->court_case == 1 ? 'checked' : '') }} class="court_case" required type="radio" /> &nbsp; <b>Yes/हां</b>
+					</td>
+					<td align="center">
+						<input name="court_case" value="2" {{ ($article->final_submit == 1 ? 'disabled' : '') }} {{ ($article->court_case == 2 ? 'checked' : '') }} class="court_case" type="radio" /> &nbsp; <b>No/नहीं</b>
+					</td>
+					<td colspan="4">Have you ever been convicted by a Court of Law in any Case/Sexual Harassment?<br>क्या आपको कभी किसी न्यायालय द्वारा किसी मामले/यौन उत्पीड़न में दोषी ठहराया गया है?</td>
+				</tr>
+				<tr>
+					<td colspan="1" align="center">
+						<input {{ ($article->final_submit == 1 ? 'disabled' : '') }} {{ ($article->final_submit == 1 ? 'checked' : '') }} type="checkbox" id="checkbox" /> &nbsp; <b>I Agree/मैं सहमत हूं</b>
+					</td>
+					<td colspan="5">I hereby declare that I have read all terms & conditions, eligibility criteria and other relevant information related to the Application and abide by them. I also declare that all the above particulars are true to the best of my knowledge. If any of my facts are found to be wrong or incorrect, my application shall be liable for rejection and I shall be solely held responsible for it.<br>मैं एतद्द्वारा घोषणा करता/करती हूं कि मैंने आवेदन से संबंधित सभी नियम और शर्तें, पात्रता मानदंड और अन्य प्रासंगिक जानकारी पढ़ ली हैं एवं उनका पालन करता/करती हूं। मैं यह भी घोषणा करता/करती हूं कि उपरोक्त सभी विवरण मेरे अनुसार सत्य व सही हैं। यदि मेरा कोई भी तथ्य गलत अथवा असत्य पाया जाता है, तो मेरा आवेदन अस्वीकृत किया जा सकता है और इसके लिए पूर्णतः मैं स्वयं उत्तरदायी ठहराया जाऊंगा/जाऊंगी।
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<span>Application Submitted On<br>आवेदन दर्ज करने की तिथि </span><br>
+						<b>{{ dmy($article->created_at) }}</b>
+					</td>
+					<td colspan="3" align="center">
+						<img src="{{URL::asset('storage/app/public/award/').'/'.$article->signature_doc}}" class="img-fluid" style="width: 140px;"><br>
+						<b>Applicant's Signature<br>आवेदक के हस्ताक्षर</b>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="6" align="center">
+						@if($article->final_submit != 1 || $article->is_editable != 2)
+						<script type="text/javascript">
+							function preventBack() {
+								window.history.forward();
+							}
+							setTimeout("preventBack()", 0);
+							window.onunload = function() {
+								null
+							};
+						</script>
+						<a  href="Javascript:void(0)" class="btn btn-info me-3" id="check1">Final Submit/अंतिम रूप से दर्ज करें</a>
+						@endif
+						<?php $checkk=form_date_status(1);?>
+						@if( $checkk == 0)
+							<tr>
+								<td colspan="6" align="center">
+									<h3 class="text-danger"> Form Not Available</h3>
+								</td>
+							</tr>
+						@else
+							@if($article->final_submit != 1 || $article->is_editable != 2)
+							<a href="{{ url('edit_laxman_award')}}/{{$article->application_no }}" class="btn btn-primary btn-sm noprint">
+								Edit/संशोधन करें
+							</a>
+							@endif
+						@endif
+					</td>
+				</tr>
+			</table>
+			@endforeach 
+			@if(isset($articles[0]->form_status) && ($articles[0]->form_status == 1 || $articles[0]->form_status == 2))
+			@if(count($queryData) > 0)
+			<x-query-details :queryData="$queryData" /> @endif @else
+			<x-query-details :queryData="$queryData" /> @endif
+		</div>
+	</div>
+</div>
+
+@endsection
+<div class="modal fade" id="AwardFrm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body text-center">
+				<p>
+					<img src="{{url('public/images/sent.png')}}" alt="Sent" title="Sent">
+				</p>
+				<div class="clearfix"></div>
+				<h5>Are you sure to submit the Application? No changes will be allowed after final submission.<br>
+					क्या आप सुनिश्चित करते हैं कि आपको आवेदन पत्र दर्ज करना है? अंतिम रूप से दर्ज करने के पश्चात आवेदन में किसी भी प्रकार के संशोधन की अनुमति नहीं होगी।
+				</h5>
+			</div>
+			<div class="modal-footer justify-content-md-center">
+				<div class="col-6 d-grid">
+					<a class="btn btn-info" id="final_submit" href="Javascript:void(0)">Final Submit/अंतिम रूप से दर्ज करें</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@push( 'custom-scripts' )
+
+
+<script>
+	
+	function PrintDoc() {
+		// $('#tableID').DataTable().destroy();
+		
+		$('.fa-download').text('Uploaded');
+		var toPrint = document.getElementById('prodiv');
+
+		var popupWin = window.open('', '_blank', 'left=100,top=100,width=1100,height=600,tollbar=0,scrollbars=1,status=0,resizable=1');
+
+		popupWin.document.open();
+
+		popupWin.document.write('<html><title>::Preview::</title><head><style>body{font-family:Arial} #logo{display:block !important; position: absolute; width: 70px; top: -7px; left: 0;} .img-query {width: 70px;   height: 50px; border-radius: 8px;} .bg-light{background-color: #dee2e6 !important; font-size: 14px !important;} .btn{display: none;} .noprint{display: none;} table{width:100%; border-collapse:collapse;} .table tr th, .table tr td{border:1px solid #000; padding:4px 5px; font-size: 12px;}</style></head><body onload="window.print()">')
+
+		popupWin.document.write(toPrint.innerHTML);
+
+		popupWin.document.write('</body></html>');
+
+		popupWin.document.close();
+		$('.fa-download').text('');
+
+		// $('#tableID').DataTable();
+	}
+	$('#check1').click(function() {
+		var content = document.createElement('div');
+		content.innerHTML = '<h3>Please click on the Declaration Checkbox and then proceed to submit. कृपया घोषणा के चेकबॉक्स पर क्लिक करें एवं तदोपरांत अंतिम रूप से दर्ज करें।</h3>';
+		if ($('#checkbox').is(':checked') && $('.court_case').is(':checked') && $('.dope_test').is(':checked'))
+			$('#AwardFrm').modal('toggle');
+		else
+			swal(content, {
+
+			});
+		return false;
+	});
+	$("#final_submit").click(function(e) {
+
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+
+		// var form = $(this);
+		var application_no = $("#application_no").first().text();
+		var actionUrl = ajaxUrl + "/finalSubmit_laxman_award/" + application_no;
+		var court_case = $('input[name=court_case]:checked').val();
+		var dope_test = $('input[name=dope_test]:checked').val();
+		//    console.log($('input[name=court_case]:checked').val());
+		//    console.log(dope_test);
+
+		$.ajax({
+			type: "POST",
+			url: actionUrl,
+
+			data: {
+				'court_case': court_case,
+				'dope_test': dope_test // <-- the $ sign in the parameter name seems unusual, I would avoid it
+			}, // serializes the form's elements.
+			success: function(data) {
+				if (data == 1) {
+					window.location.href = ajaxUrl + "/dashboard";
+				} else {
+					$('#AwardFrm').modal('hide');
+					error("Something Error");
+				}
+			}
+		});
+
+	});
+</script>
+
+@endpush

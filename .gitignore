@@ -1,0 +1,73 @@
+
+############################################
+# Laravel (inside /application)
+############################################
+
+/application/vendor/
+/application/node_modules/
+/application/public/
+/application/storage/*.key
+/application/storage/logs/
+/application/storage/framework/cache/
+/application/storage/framework/sessions/
+/application/storage/framework/views/
+/application/bootstrap/cache/*.php
+
+/application/.env
+/application/.env.*
+!/application/.env.example
+
+############################################
+# Frontend build (if any tooling used)
+############################################
+
+/node_modules/
+/npm-debug.log*
+/yarn-debug.log*
+/yarn-error.log*
+
+############################################
+# Laravel public build outputs
+############################################
+
+/application/public/storage
+/application/public/build
+/application/public/hot
+
+############################################
+# OS / IDE files
+############################################
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+############################################
+# Logs / temp files (your root project)
+############################################
+
+*.log
+*.tmp
+*.cache
+
+############################################
+# Sensitive / server configs
+############################################
+
+.env
+.env.*
+!.env.example
+.user.ini
+
+############################################
+# Optional backups (your project has bkp/)
+############################################
+
+bkp/
+
+############################################
+# If these are generated dynamically
+############################################
+
+/application/storage/

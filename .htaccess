@@ -1,0 +1,16 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # 1. Serve root files/dirs directly (EXCEPT 'application' folder)
+    # This ensures existing root files like connection.php or static assets work.
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteCond %{REQUEST_URI} !^/application [NC]
+    RewriteRule ^ - [L]
+
+    # 2. If it's not a root file or directory, and doesn't already have /application/
+    # in the URI, prepend /application/ and let the internal .htaccess handle the rest.
+    RewriteCond %{REQUEST_URI} !^/application [NC]
+    RewriteRule ^(.*)$ application/$1 [L,QSA]
+</IfModule>

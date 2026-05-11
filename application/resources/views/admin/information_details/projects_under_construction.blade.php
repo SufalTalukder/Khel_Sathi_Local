@@ -1,0 +1,539 @@
+@extends( 'layouts/admin_layout' )
+@section( 'content' )
+<style>
+    .nowraptd {
+        white-space: nowrap;
+    }
+
+    .dn {
+        display: none;
+    }
+    .ui-datepicker-calendar {
+        display: none;
+    }
+</style>
+<style>
+    .hide-panel {
+        background: #f7f7f7;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px dashed #ccc;
+    }
+</style>
+<div class="row">
+    <div class="col-12">
+        <div class="pageheader" id="menu-margin">
+            <h4 class="mb-0">
+                बिन्दु-01 - निर्माणाधीन परियोजनाओं की स्थिति
+                <a title="Print" class="btn btn btn-outline-success float-end" data-print="modal"
+                    onclick="PrintDoc()"><i class="icons icon-printer"></i> प्रिंट</a>
+                    <button onclick="PrintExce('Project Under Construction')" class="btn btn btn-outline-primary float-end">Excel</button>
+            </h4>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                @if(Auth::guard('admin')->user()->admin_role != 1 && Auth::guard('admin')->user()->admin_role != 18)
+                <form action="{{url('admin/information/projects_under_construction')}}" class="needs-validation"
+                    id="reload_two" novalidate method="post" autocomplete="off">
+                    @csrf
+                    <fieldset>
+                        <div class="row">
+                        <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="placeholder">माह <span class="text-danger">*</span></label>
+                                    <select name="month_name" required class="form-control form-select">
+                                        <option value=''>--select--</option>
+                                        <option @if(isset($ed_data->month_name) && ($ed_data->month_name==1)) selected @endif value='1'>Janaury</option>
+                                        <option @if(isset($ed_data->month_name) && ($ed_data->month_name==2)) selected @endif  value='2'>February</option>
+                                        <option @if(isset($ed_data->month_name) && ($ed_data->month_name==3)) selected @endif  value='3'>March</option>
+                                        <option @if(isset($ed_data->month_name) && ($ed_data->month_name==4)) selected @endif  value='4'>April</option>
+                                        <option @if(isset($ed_data->month_name) && ($ed_data->month_name==5)) selected @endif  value='5'>May</option>
+                                        <option @if(isset($ed_data->month_name) && ($ed_data->month_name==6)) selected @endif  value='6'>June</option>
+                                        <option @if(isset($ed_data->month_name) && ($ed_data->month_name==7)) selected @endif  value='7'>July</option>
+                                        <option @if(isset($ed_data->month_name) && ($ed_data->month_name==8)) selected @endif  value='8'>August</option>
+                                        <option @if(isset($ed_data->month_name) && ($ed_data->month_name==9)) selected @endif  value='9'>September</option>
+                                        <option @if(isset($ed_data->month_name) && ($ed_data->month_name==10)) selected @endif  value='10'>October</option>
+                                        <option @if(isset($ed_data->month_name) && ($ed_data->month_name==11)) selected @endif  value='11'>November</option>
+                                        <option @if(isset($ed_data->month_name) && ($ed_data->month_name==12)) selected @endif  value='12'>December</option>
+                                    </select>
+                                </div>
+                            </div>
+                            @if(isset($ed_data->id))
+                            <input type="hidden" value="{{$ed_data->id}}" name="id">
+                            @endif
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="placeholder">वर्ष <span class="text-danger">*</span></label>
+                                    <select name="year" required class="form-control form-select">
+                                        <option value=''>--select--</option>
+                                        @for($i=2000;$i<=date('Y');$i++)
+                                            {
+                                            <option @if(isset($ed_data->year) && ($ed_data->year==$i)) selected @endif value={{$i}}>{{$i}}</option>
+                                            }
+                                            @endfor
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4" id="district_name_selected">
+                                <div class="form-group mb-3">
+                                    <label class="placeholder">जनपद/संस्था का नाम <span
+                                            class="text-danger">*</span></label>
+                                    <select name="district_name" id="district_name" class="form-control form-select"
+                                        required>
+                                        @foreach($districts as $key=>$district)
+                                        <option  @if(isset($ed_data->district_name) && ($ed_data->district_name==$district->id)) selected @endif value="{{ $district->id }}"
+                                            data-badge="">{{$district->city}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('district_name')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="placeholder">परियोजना का नाम <span class="text-danger">*</span></label>
+                                    <input type="text" name="project_name" @if(isset($ed_data->project_name) ) value="{{$ed_data->project_name}}" @endif class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="placeholder">कार्यदायी संस्था का नाम <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="name_of_executing_agency" @if(isset($ed_data->name_of_executing_agency) ) value="{{$ed_data->name_of_executing_agency}}" @endif class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="placeholder">मूल लागत <span class="text-danger">*</span></label>
+                                    <input type="number" min="0" step="any" name="original_cost" @if(isset($ed_data->original_cost) ) value="{{$ed_data->original_cost}}" @endif class="form-control"
+                                        required />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="placeholder">परियोजना की पुनरीक्षित लागत</label>
+                                    <input type="number" min="0" step="any" name="revised_cost_of_the_project" @if(isset($ed_data->revised_cost_of_the_project) ) value="{{$ed_data->revised_cost_of_the_project}}" @endif
+                                        class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="placeholder">परियोजना स्वीकृति की तिथि</label>
+                                    <input type="date" name="date_of_project_approval" @if(isset($ed_data->date_of_project_approval) ) value="{{$ed_data->date_of_project_approval}}" @endif class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="placeholder">अब तक कुल स्वीकृत धनराशि
+                                        <span class="text-danger">*</span></label>
+                                    <input type="number" step="any" name="total_sanctioned_amount" @if(isset($ed_data->total_sanctioned_amount) ) value="{{$ed_data->total_sanctioned_amount}}" @endif class="form-control" required/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="placeholder">अवशेष देय धनराशि</label>
+                                    <input type="number" min="0" step="any" name="residual_amount_due" @if(isset($ed_data->residual_amount_due) ) value="{{$ed_data->residual_amount_due}}" @endif class="form-control"
+                                         />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="placeholder">परियोजना प्रारम्भ होने की तिथि </label>
+                                    <input type="date" name="project_start_date" @if(isset($ed_data->project_start_date) ) value="{{$ed_data->project_start_date}}" @endif class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="placeholder">परियोजना पूर्ण होने की तिथि </label>
+                                    <input type="date" name="project_completion_date" @if(isset($ed_data->project_completion_date) ) value="{{$ed_data->project_completion_date}}" @endif class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="placeholder">परियोजना पूर्ण होने की पुनःनिर्धारित तिथि </label>
+                                    <input type="date" name="rescheduled_date" @if(isset($ed_data->rescheduled_date) ) value="{{$ed_data->rescheduled_date}}" @endif class="form-control"  />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="placeholder">कुल व्यय<span class="text-danger">*</span></label>
+                                    <input type="number" min="0" step="any" name="total_expenditure" @if(isset($ed_data->total_expenditure) ) value="{{$ed_data->total_expenditure}}" @endif class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="placeholder">समग्र भौतिक (प्रतिशत में)<span class="text-danger">*</span></label>
+                                    <input type="number" min="0" step="any" max="100" name="overall_physical" @if(isset($ed_data->overall_physical) ) value="{{$ed_data->overall_physical}}" @endif class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="placeholder">अभ्युक्ति</label>
+                                    <input type="text" name="comment" @if(isset($ed_data->comment) ) value="{{$ed_data->comment}}" @endif class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bhoechie-footer">
+                            <div class="row justify-content-center">
+                                <div class="col-md-2 d-grid">
+                                    <button id="reset" type="reset"
+                                        class="btn btn-outline-danger rounded-pill">रीसेट</button>
+                                </div>
+                                <div class="col-md-2 d-grid">
+                                    <button type="submit" class="btn  btn-outline-info rounded-pill">सुनिश्चित
+                                        करे</button>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+                @endif
+                <div class="container removebg-color" style="background: #f0e7eb;padding: 10px;margin-bottom: 10px;">
+                    <form action="{{ url('admin/information/projects_under_construction') }}" class="needs-validation" method="get" novalidate
+                        autocomplete="off">
+                        <div class="pageheaderr">
+                            <div class="row">
+                                {{-- <div class="col-md-1" style="padding-top: 1.04rem;"><h4>Filter</h4></div> --}}
+                                <div class="col-md-2">
+                                    <label class="form-label" style="margin-bottom: 0;">Division</label>
+                                    <select name="division_name" id="division_name" class="form-control form-select">
+                                        <option value="">--select--</option>
+                                        @foreach($division as $key=>$division)
+                                        <option {{$division->id == request()->input('division_name') ? 'selected' : ''}} value="{{ $division->id }}"
+                                            data-badge="">{{$division->division_name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label" style="margin-bottom: 0;">District</label>
+                                    <input type="hidden" id="district_id" value="{{request()->input('district_name')}}">
+                                    <select name="district_name" id="district_name" class="form-control form-select">
+                                        <option value="">--select--</option>
+                                        @foreach($districts as $key=>$district)
+                                        <option {{$district->id == request()->input('district_name') ? 'selected' : ''}} value="{{ $district->id }}"
+                                            data-badge="">{{$district->city}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+
+                                            <label class="form-label" style="margin-bottom: 0;"> Year</label>
+                                            <select name="from_year" id="from_year" class="form-control form-select">
+                                                <option value="all">--all--</option>
+                                                @for ($i = 2000; $i <=date('Y'); $i++)
+                                                <option   {{$i == $from_year ? 'selected' : ''}} value="{{ $i }}">{{ $i }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" style="margin-bottom: 0;">From Month</label>
+                                            <select name="from_month" id="from_month" class="form-control form-select">
+                                                <option value='all'>--all--</option>
+                                                <option {{1 == $from_month ? 'selected' : ''}} value='1'>Janaury</option>
+                                                <option {{2 == $from_month ? 'selected' : ''}} value='2'>February</option>
+                                                <option {{3 == $from_month ? 'selected' : ''}} value='3'>March</option>
+                                                <option {{4 == $from_month ? 'selected' : ''}} value='4'>April</option>
+                                                <option {{5 == $from_month ? 'selected' : ''}} value='5'>May</option>
+                                                <option {{6 == $from_month ? 'selected' : ''}} value='6'>June</option>
+                                                <option {{7 == $from_month ? 'selected' : ''}} value='7'>July</option>
+                                                <option {{8 == $from_month ? 'selected' : ''}} value='8'>August</option>
+                                                <option {{9 == $from_month ? 'selected' : ''}} value='9'>September</option>
+                                                <option {{10 == $from_month ? 'selected' : ''}} value='10'>October</option>
+                                                <option {{11 == $from_month ? 'selected' : ''}} value='11'>November</option>
+                                                <option {{12 == $from_month ? 'selected' : ''}} value='12'>December</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="row">
+                                        {{-- <div class="col-md-6">
+
+                                            <label class="form-label" style="margin-bottom: 0;">To Year</label>
+                                            <select name="to_year" id="to_year" class="form-control form-select">
+                                                <option value="all">--all--</option>
+                                                @for ($i = 2000; $i <=date('Y'); $i++)
+                                                <option   {{$i == $to_year ? 'selected' : ''}} value="{{ $i }}">{{ $i }}</option>
+                                                @endfor
+                                            </select>
+                                        </div> --}}
+                                        <div class="col-md-12">
+                                            <label class="form-label" style="margin-bottom: 0;">To Month</label>
+                                            <select name="to_month" id="to_month" class="form-control form-select">
+                                                <option value='all'>--all--</option>
+                                                <option {{1 == $to_month ? 'selected' : ''}} value='1'>Janaury</option>
+                                                <option {{2 == $to_month ? 'selected' : ''}} value='2'>February</option>
+                                                <option {{3 == $to_month ? 'selected' : ''}} value='3'>March</option>
+                                                <option {{4 == $to_month ? 'selected' : ''}} value='4'>April</option>
+                                                <option {{5 == $to_month ? 'selected' : ''}} value='5'>May</option>
+                                                <option {{6 == $to_month ? 'selected' : ''}} value='6'>June</option>
+                                                <option {{7 == $to_month ? 'selected' : ''}} value='7'>July</option>
+                                                <option {{8 == $to_month ? 'selected' : ''}} value='8'>August</option>
+                                                <option {{9 == $to_month ? 'selected' : ''}} value='9'>September</option>
+                                                <option {{10 == $to_month ? 'selected' : ''}} value='10'>October</option>
+                                                <option {{11 == $to_month ? 'selected' : ''}} value='11'>November</option>
+                                                <option {{12 == $to_month ? 'selected' : ''}} value='12'>December</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- <div class="col-md-2">
+                                    <label class="form-label" style="margin-bottom: 0;">To Month</label>
+                                    <select name="to_month" id="to_month" class="form-control form-select">
+                                        <option value='all'>--all--</option>
+                                        <option {{1 == $to_month ? 'selected' : ''}} value='1'>Janaury</option>
+                                        <option {{2 == $to_month ? 'selected' : ''}} value='2'>February</option>
+                                        <option {{3 == $to_month ? 'selected' : ''}} value='3'>March</option>
+                                        <option {{4 == $to_month ? 'selected' : ''}} value='4'>April</option>
+                                        <option {{5 == $to_month ? 'selected' : ''}} value='5'>May</option>
+                                        <option {{6 == $to_month ? 'selected' : ''}} value='6'>June</option>
+                                        <option {{7 == $to_month ? 'selected' : ''}} value='7'>July</option>
+                                        <option {{8 == $to_month ? 'selected' : ''}} value='8'>August</option>
+                                        <option {{9 == $to_month ? 'selected' : ''}} value='9'>September</option>
+                                        <option {{10 == $to_month ? 'selected' : ''}} value='10'>October</option>
+                                        <option {{11 == $to_month ? 'selected' : ''}} value='11'>November</option>
+                                        <option {{12 == $to_month ? 'selected' : ''}} value='12'>December</option>
+                                    </select>
+                                </div> --}}
+                                <!-- <div class="col-md-3">
+                    <label class="form-label" style="margin-bottom: 0;">From Date</label>
+                    <input type="text" name="from_date" id="from_date" value="{{request()->input('from_date')}}" placeholder="DD/MM/YYYY" class="form-control dateTime" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" style="margin-bottom: 0;">To Date</label>
+                    <input type="text" name="to_date" id="to_date" value="{{request()->input('to_date')}}" placeholder="DD/MM/YYYY" class="form-control dateTime" />
+                </div> -->
+                                <div class="col-md-1 custom-buton" style="padding-top: 1.4rem;">
+                                    <button class="btn btn-primary btn-sm" type="submit" title="Search">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-1 custom-buton" style="padding-top: 1.4rem;">
+                                    <a class="btn btn-primary btn-sm" href="{{url('admin/information/projects_under_construction')}}"><i class="fas fa-refresh"></i></a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive" id="prodiv">
+                            <table style="width: 100%;" class="dn">
+                                <thead class="dn">
+                                    <tr>
+                                        <th colspan="2">
+                                            <div style="padding: 0 15px 3px; margin-bottom: 10px; border-bottom: 0px solid #000; position: relative;">
+                                                <h2 style="text-align: center; margin:0px 0px 15px 0px; font-size:14pt; padding: 0px; color:#383838; font-weight: bold;">
+                                                    बिन्दु-01
+                                                </h2>
+                                                <h2 style="text-align: center; margin:0px 0px 0px 0px; font-size:14pt; padding: 0px; color:#383838; font-weight: bold;">
+                                                    खेल विभाग के अंतर्गत निर्माण खेल अवस्थापनाये
+                                                </h2>
+                                                {{-- <h6 style="text-align: center; margin:10px 0px 15px 0px; font-size:12pt; padding: 0px; color:#383838; font-weight: bold; text-decoration:underline;">
+                                                कार्यदायी संस्था उ0प्र0 राजकीय निर्माण निगम लि0
+                                            </h6> --}}
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="font-size: 10pt; text-align: left;">
+                                            <b>Year :</b> {{request()->input('year') ? request()->input('year'):date("Y")}} <b>@if(request()->input('from_month') != 'all' || request()->input('to_month') != 'all'  )  ,Month : @endif </b> {{request()->input('from_month') ? month_name(request()->input('from_month')):month_name(date("m"))}} @if(request()->input('from_month') != 'all' && request()->input('to_month') != 'all'  )  to @endif {{request()->input('to_month') ? month_name(request()->input('to_month')):month_name(date("m"))}}
+                                        </th>
+                                        <th style="font-size: 10pt; text-align:right">
+                                            <strong>Report Period : </strong> {{first_insert('information_project_under_construction','created_on')}} to {{date("d-m-Y")}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover bg-white datatable mb-3" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>क्र.सं.</th>
+                                            <th>मण्डल</th>
+                                            <th>जनपद</th>
+                                            <th>माह  <br>  वर्ष</th>
+                                            <th>परियोजना का नाम</th>
+                                            <th>कार्यदायी संस्था का नाम</th>
+                                            <th>मूल लागत</th>
+                                            <th>परियोजना की पुनरीक्षित लागत</th>
+                                            <th>परियोजना स्वीकृति की तिथि</th>
+                                            <th>अब तक कुल स्वीकृत धनराशि</th>
+                                            <th>अवशेष देय धनराशि</th>
+                                            <th>परियोजना प्रारम्भ होने की तिथि</th>
+                                            <th>परियोजना पूर्ण होने की तिथि</th>
+                                            <th>परियोजना पूर्ण होने की पुनःनिर्धारित तिथि</th>
+                                            <th>कुल व्यय</th>
+                                            <th>समग्र भौतिक (प्रतिशत में)</th>
+                                            <th>अभ्युक्ति</th>
+                                            <th class="noprint">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                        $t_original_cost = 0;
+                                        $t_revised_cost_of_the_project = 0;
+                                        $t_total_sanctioned_amount = 0;
+                                        $t_residual_amount_due = 0;
+                                        $t_total_expenditure = 0;
+                                        ?>
+                                        @foreach($underConstructionInformation as $key=>$item)
+                                        <tr>
+                                            <td>{{$key+1}}</td>
+                                            <td>
+                                                <?php $division_id = DB::table('hostel_div_district_mapping')->where('district_id', $item->district_id)->first(); ?>
+                                                @if($division_id)
+                                                {{divisionName($division_id->division_id)}}
+                                                @else
+                                                NA
+                                                @endif
+
+                                            </td>
+                                            <td>{{districtName($item->district_id)}}</td>
+                                            <td>{{month_name($item->month_name)}} <br> {{$item->year}}</td>
+                                            <td>{{repairHindi($item->project_name)}}</td>
+                                            <td>{{repairHindi($item->name_of_executing_agency)}}</td>
+                                            <td>
+                                                <?php $t_original_cost += $item->original_cost ?>
+                                                {{$item->original_cost}}
+                                            </td>
+                                            <td>
+                                                <?php $t_revised_cost_of_the_project += $item->revised_cost_of_the_project ?>
+                                                {{$item->revised_cost_of_the_project}}
+                                            </td>
+                                            <td>
+                                                @if($item->date_of_project_approval)
+                                                {{dmy($item->date_of_project_approval)}}
+                                            @else NA @endif
+                                            </td>
+                                            <td>
+                                                <?php $t_total_sanctioned_amount += $item->total_sanctioned_amount ?>
+                                                {{($item->total_sanctioned_amount)}}
+                                            </td>
+                                            <td>
+                                                <?php $t_residual_amount_due += $item->residual_amount_due ?>
+                                                {{$item->residual_amount_due}}
+                                            </td>
+                                            <td>
+                                                @if($item->project_start_date)
+                                                {{dmy($item->project_start_date)}} 
+                                                @else NA @endif
+                                            </td>
+                                            <td>
+                                                @if($item->project_completion_date)
+                                                {{dmy($item->project_completion_date)}}
+                                                @else NA @endif
+                                            </td>
+                                            <td>
+                                                @if($item->rescheduled_date)
+                                                {{dmy($item->rescheduled_date)}}
+                                                @else NA @endif
+                                            </td>
+                                            <td>
+                                                <?php $t_total_expenditure += $item->total_expenditure ?>
+                                                {{$item->total_expenditure}}
+                                            </td>
+                                            <td>{{$item->overall_physical}}</td>
+                                            <td>{{repairHindi($item->comment)}}</td>
+                                            <td class="text-center noprint">
+                                                <a class="btn btn-sm btn-dark pointer bt" href="{{ route('projects_under_construction' , $item->id) }}">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            
+                                                <a class="btn btn-sm btn-danger pointer bt" href="{{ route('delete_inf' , [$item->id,'information_project_under_construction']) }}" onclick="return confirm('Are you sure you want to delete ?')">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                            
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tr>                  
+                                        <td colspan="6" align="right"><b>कुल योग </b></td>
+                                        <td>{{number_format($t_original_cost,2)}}</td>
+                                        <td>{{number_format($t_revised_cost_of_the_project,2)}}</td>
+                                        <td>&nbsp;</td>
+                                        <td>{{number_format($t_total_sanctioned_amount,2)}}</td>
+                                        <td>{{number_format($t_residual_amount_due,2)}}</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>{{number_format($t_total_expenditure,2)}}</td>
+                                        <td colspan="3" >&nbsp;</td>
+
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+@endsection
+@push( 'custom-scripts' )
+<script>
+    function PrintDoc() {
+        $('#dataTable').DataTable().destroy();
+        var toPrint = document.getElementById('prodiv');
+
+        var popupWin = window.open('', '_blank', 'left=100,top=100,width=1100,height=600,tollbar=0,scrollbars=1,status=0,resizable=1');
+
+        popupWin.document.open();
+
+        popupWin.document.write('<html><title>::Preview::</title><head><style>body{font-family:Arial} .noprint{display: none;} table{width:100%; border-collapse:collapse;} .table tr th, .table tr td{border:1px solid #000; padding:3px 5px; font-size: 12px;} .table > thead > tr > th{background-color: #eee;}</style></head><body onload="window.print()">')
+
+        popupWin.document.write(toPrint.innerHTML);
+
+        popupWin.document.write('</body></html>');
+
+        popupWin.document.close();
+
+        $('#dataTable').DataTable();
+
+    }
+       
+</script>
+{{-- <script type="text/javascript">
+    $('input[name="identified_the_department"]').click(function() {
+		var identified_the_department = $(this).val();
+		if (identified_the_department == 1) {
+			$('#district_name_selected').show();
+			$('#tehsil_name_selected').hide();
+			$("#district_name").prop('required', true);
+			$("#tehsil_name").prop('required', false);
+		} else if (identified_the_department == 2) {
+			$('#tehsil_name_selected').show();
+			$('#district_name_selected').hide();
+			$("#district_name").prop('required', false);
+			$("#tehsil_name").prop('required', true);
+			//$("#um_land_remarks").prop('required', false);
+		}
+	});
+    
+</script> --}}
+
+<script type="text/javascript">
+    $(function() {
+        $('.dateTimeee').datepicker( {
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'MM yy',
+        onClose: function(dateText, inst) { 
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        }
+        });
+    });
+</script>
+@endpush

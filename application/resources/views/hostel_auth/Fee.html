@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Readiness Report</title>
+    <style>
+        body {
+            font-family: Arial;
+            font-size: 10px;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .dn {
+            display: none;
+        }
+
+        .table tr th, .table tr td {
+            border: 1px solid #000;
+            padding: 3px 3px;
+            font-size: 9pt;
+        }
+    </style>
+</head>
+
+<body style="font-family: Arial;">
+    <div style="text-align: right; padding: 5px 0; width: 90%; margin: 0 auto;">
+        <button type="button" class="btn btn-default btn-primary" data-print="modal" onclick="PrintDoc()">Print</button>
+    </div>
+    <div id="prodiv">
+        <div id="content" style="position:relative;">
+            <table border="0" cellspacing="0" cellpadding="8" width="100%" style="border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            <div style="padding: 0 15px 3px; margin-bottom: 10px; border-bottom: 2px solid #000; position: relative;">
+                                <img src="logo.png" style="width: 75px; height: auto; position: absolute; top: 0px; left: 20px;">
+                                <h1 style="text-align: center; font-size: 20pt; margin: 0px 0px 0px 0px; padding: 0px 0 0; color: #383838; font-weight: bold;">
+                                    Sports Directorate, Govt. of Uttar Pradesh
+                                </h1>
+                                <h2 style="text-align: center; margin:0px 0px 0px 0px; font-size:11pt; padding: 0px; color:#383838; font-weight: bold;">
+                                    Khel Bhawan Hazratganj Lucknow, Uttar Pradesh 226001
+                                </h2>
+                                <h5 style="text-align: center; margin:10px 0px 0px 0px; font-size:16pt; padding: 0px; color:#383838; font-weight: bold;">
+                                    Hostel Fee Receipt
+                                </h5>
+                            </div>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="font-size: 10pt; text-align:left">
+                            <strong>Name : </strong> Ayush Jaiswal
+                        </th>
+                        <th style="text-align: right; font-size: 10pt;">
+                            <strong>Challan No. : </strong> 2401180258322
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="font-size: 10pt; text-align:left">
+                            <strong>Mobile No. : </strong> +91-8978534621
+                        </th>
+                        <th style="text-align: right; font-size: 10pt;">
+                            <strong>Transaction ID : </strong> 2401180258322
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="font-size: 10pt; text-align:left">
+                            <strong>Email : </strong> ayush@otpl.local
+                        </th>
+                        <th style="text-align: right; font-size: 10pt;">
+                            <strong>Department Code : </strong> 24011802
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="font-size: 10pt; text-align:left">
+                            <strong>Year : </strong> 2024-2025
+                        </th>
+                        <th style="text-align: right; font-size: 10pt;">
+                            <strong>Date/time : </strong> 24/05/2024 / 10:23:29 AM
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="2">
+                            <div class="table-responsive">
+                                <table class="table" border="0" cellspacing="0" cellpadding="3" width="100%" style="border-collapse:collapse; font-size:10pt;">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.No.</th>
+                                            <th>Hostel Name</th>
+                                            <th>Sports Name</th>
+                                            <th>Fee</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td align="center">1</td>
+                                            <td>Moradabad City Girls</td>
+                                            <td>Cricket</td>
+                                            <td>Rs. 2,500</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" align="right"><b>Total</b></td>
+                                            <td><b>Rs. 2,500.00</b></td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot class="dn">
+                                        <tr>
+                                            <td colspan="17" style="border:0; height:30px;">&nbsp;</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function PrintDoc() {
+            var toPrint = document.getElementById('prodiv');
+
+            var popupWin = window.open('', '_blank', 'left=100,top=100,width=1100,height=600,tollbar=0,scrollbars=1,status=0,resizable=1');
+
+            popupWin.document.open();
+
+            popupWin.document.write('<html><title>Readiness_Report</title><head><style>body{font-family:Arial; counter-reset: page;} .noprint{display: none;} table{width:100%; border-collapse:collapse;} .table tr th, .table tr td{border:1px solid #000; padding:3px 3px; font-size: 10pt;} @page {size: Legal potrait; margin: 10pt 10pt 20pt 10pt;}</style></head><body onload="window.print()">')
+
+            popupWin.document.write(toPrint.innerHTML);
+
+            popupWin.document.write('<div style="text-align:center; width:98%; font-size:9pt; padding:0px; position:fixed; bottom:0;">This is a Software Generated Report.<div id = "pageFooter" style ="float:right;">Page 1 of 4</div></div></body></html>');
+
+            popupWin.document.close();
+        }
+    </script>
+</body>
+</html>

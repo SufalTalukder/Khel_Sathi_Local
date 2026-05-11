@@ -1,0 +1,223 @@
+@extends( 'layouts/admin_layout' )
+@section( 'content' )
+
+
+<div class="pageheader" id="menu-margin">
+	<h4 class="mb-0">
+        @if (last(request()->segments()) == 1)
+
+        Swimming Pool (Mini)
+    @elseif (last(request()->segments()) == 2)
+    Guest Room
+    @elseif (last(request()->segments()) == 3)
+  Swimming Pool (Adult)
+    @elseif (last(request()->segments()) == 4)
+
+    Gymnasium
+    @elseif (last(request()->segments()) == 5)
+    Stadium
+    @endif Booking List
+		<a title="Application Details ExportToExcel" class="btn btn-sm btn-success float-end" onclick="ExportToExcel('xlsx')">
+			<i class="fa fa-file-excel"></i> Export to Excel
+		</a>
+
+        <a href="{{route('admin_facility_booking_application_pdf', last(request()->segments()))}}" class="btn btn-sm btn-primary float-end" target="_blank" rel="noopener noreferrer"> Export PDF</a>
+	</h4>
+</div>
+<div class="card">
+	<div class="card-body">
+		<div class="table-responsive table-bordred">
+			<table id="dataTable" class="table table_new datatable table-bordred table-hover bg-white">
+				<thead>
+					<tr>
+
+                            <th>S.No.</th>
+                            <th>Booking No.</th>
+                            <th>Booking Type</th>
+                            <th>Name</th>
+                            <th>Email ID</th>
+                            <th class="text-center">Mobile No.</th>
+                            <th class="text-center">Status of Application</th>
+                            <th class="text-center">Payment Status</th>
+                            <th class="text-center">Action</th>
+
+
+					</tr>
+				</thead>
+				<tbody>
+					@if(!empty($application)) @foreach($application as $key=>$item)
+					<tr>
+                        <td>{{$key + 1}}</td>
+                        <td>
+                            {{$item->application_no}}
+                       </td>
+                       <td>
+                        @if ($item->service == 1)
+
+                        Swimming Pool (Mini)
+                    @elseif ($item->service == 2)
+                    Guest Room
+                    @elseif ($item->service == 3)
+                  Swimming Pool (Adult)
+                    @elseif ($item->service == 4)
+
+                    Gymnasium
+                    @elseif ($item->service == 5)
+                    Stadium
+                    @endif
+                   </td>
+                        <td>{{$item->name}}</td>
+                        <td>{{$item->email}}</td>
+                        <td class="text-center">{{$item->mobile}}</td>
+
+
+                        <td class="text-center">
+
+                            @if ($item->status == 1 && $item->final_submit == 1)
+
+                            <span class="badge bg-success ">Accepted</span>
+                            <br>{{dmy($item->accept_reject_date)}}
+                             @elseif ($item->status == 2 && $item->final_submit == 1)
+                             <span class="badge bg-danger ">Rejected
+                               </span> <br>{{dmy($item->accept_reject_date)}}
+                             @elseif($item->final_submit == 1 && $item->query_status == 2)
+                             <button type="button" class="btn btn-outline-primary btn-sm">  Re-Submitted</button>
+                             {{dmy($item->final_submit_date)}}
+                             @elseif( $item->final_submit == 1 && $item->query_status == 1)
+
+                             <button type="button" class="btn btn-outline-warning btn-sm">  Query Marked</button>
+                             {{dmy($item->marked_on)}}
+                             @elseif ($item->status == 1 && $item->final_submit == 1)
+                            @else
+                         <span class="badge bg-primary ">Pending</span>
+                         <br>{{dmy($item->final_submit_date)}}
+                        @endif
+                       </td>
+
+                       <td class="text-center">
+                        @if ($item->status == 1 && $item->payment_status == 1)
+
+                        <span class="badge bg-success ">Success</span> <br>
+                           {{rajkosh_payment_booking($item->application_no)->Depchallan}}
+                           <br>
+                        {{dmy($item->payment_date)}} <br>
+                          <strong> {{$item->amount_to_be_paid}} INR. </strong>
+
+
+
+                        @elseif ($item->status == 1 && $item->payment_status != 1)
+
+                        @if ($item->fee_exemption_status == 1)
+                        <span class="badge bg-warning">Fee Exemption</span>
+                        @else
+                        <span class="badge bg-primary ">Pending</span><br>
+                      <strong> {{$item->amount_to_be_paid}} INR. </strong>
+                        @endif
+                       @else
+                       NA
+
+                   @endif
+                  </td>
+
+
+                        <td class="text-center">
+
+                        <a class="btn btn-outline-success btn-sm" href="{{route('admin_facility_booking_preview', $item->id_application)}}"><i class="fa fa-eye"></i></a>
+                        </td>
+                    </tr>
+					@endforeach @endif
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+@endsection
+
+@push('custom-scripts')<div class="modal" id="exampleModalLabellllll" >
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Approve Booking</h5>
+                   </div>
+
+
+
+            <form  action="" method="post" class="needs-validation" novalidate>
+                @csrf
+                <div class="modal-body">
+
+
+
+
+                    <div class="row">
+                        <div class="form-group mb-3">
+                            <label>Status</label>
+                            <input type="hidden" name="id" id="bookid" value="" >
+                            <select class="form-select form-control" name="status" required >
+                              <option value="">Select</option>
+                              <option value="1">Approved </option>
+                              <option value="2">Declined</option>
+                            </select>
+                          </div>
+
+                        <div class="form-group mb-3">
+                            <label class="placeholder">
+                               Message
+                            </label>
+                            <input type="text" class="form-control" value="" name="status_message" required>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn btn-outline-danger"><span class="icons icon-cloud-download"></span> Download</button>-->
+                    <button type="submit" class="btn btn-info">Submit</button>
+                    <button type="button" class="btn btn-danger" onclick="closetrial()">No</button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+<script>
+function approved(id){
+    alert(id);
+    $("#bookid").val(id);
+
+    $("#exampleModalLabellllll").show();
+
+
+
+}
+
+function closetrial(){
+    $("#exampleModalLabellllll").hide();
+}
+
+	function ExportToExcel(type, fn, dl) {
+		var elt = document.getElementById('dataTable');
+		var wb = XLSX.utils.table_to_book(elt, {
+			sheet: "sheet1"
+		});
+		return dl ?
+			XLSX.write(wb, {
+				bookType: type,
+				bookSST: true,
+				type: 'base64'
+			}) :
+			XLSX.writeFile(wb, fn || ('Application Details.' + (type || 'xlsx')));
+	}
+
+
+
+
+
+
+
+
+</script>
+@endpush

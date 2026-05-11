@@ -1,0 +1,304 @@
+@extends('layouts/layout')
+@section('content')
+<style>
+    .mr-2 {
+        margin-right: 4px !important;
+    }
+
+    .pagebody.sidepage-pading {
+        padding: 0px 0px 0px 0px !important;
+    }
+</style>
+<div class="row">
+    <div class="col-2">
+        <a href="{{ route('dashboard') }}" class="btn btn-outline-primary backbtn"><span class="icons icon-arrow-left"></span> Back to Dashboard</a>
+        <div class="left-sidebar">
+            <div >
+                <ul>
+                    <li>
+                        <a href="{{ route('cp') }}">
+                            <span class="icons icon-arrow-right"></span>Company Profile/Basic Details
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('registered-project') }}">
+                            <span class="icons icon-arrow-right"></span>Project Details
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-10">
+        <div class="col-md-12 pageheader mb-0">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Project Details</h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Project Details</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ $project_name }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content border-all-side">
+            <div class="pagebody sidepage-pading pt-3 pb-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <h5>Organisation Details</h5>
+                                    </div>
+                                    <div class="col-md-5" style="text-align: right;">
+                                        <a href="{{ route('projectdeatilsExportsUser',['id'=>$id,'type'=>$type])}}" class="btn btn-primary btn-sm float-end">
+                                            &nbsp;&nbsp;Download PDF&nbsp;&nbsp;<i class="fa fa-arrow-down"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                @if($project_name!='')
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table  id="dataTable" class="table table-bordered bg-light mb-0">
+                                                <tbody>
+                                                    @if($profile->company_name!='')
+                                                    <tr>
+                                                        <td><b>Organisation/Company/Firm Name</b></td>
+                                                        <td colspan="3">{{ $profile->company_name }}</td>
+                                                    </tr>
+                                                    @endif
+                                                    <tr>
+                                                        <td><b>Authorize Person</b></td>
+                                                        <td colspan="3">{{ $profile->fullname }}</td>
+                                                    </tr>
+                                                    @if($profile->legal_status!='')
+                                                    <tr>
+                                                        <td><b>Legal Status</b></td>
+                                                        <td colspan="3">{{ $profile->legal_status }}</td>
+                                                    </tr>
+                                                    @endif
+                                                    <tr>
+                                                        <td style="width: 28%;"><b>Email ID</b></td>
+                                                        <td style="width: 22%;">{{ $profile->email }}</td>
+                                                        <td style="width: 28%;"><b>Mobile Number</b></td>
+                                                        <td style="width: 22%;">{{ $profile->mobile }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>GST No.</b></td>
+                                                        <td>{{ $profile->gstin_no }}</td>
+                                                        <td><b>PAN Card No.</b></td>
+                                                        <td>{{ $profile->pan_no }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <h5 class="subheading">Project Details</h5>
+                                            @if($type != 'SG002' && $type != 'SG009')
+                                            <table  id="dataTable" class="table table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="width: 28%;"><b>Preference 1</b></td>
+                                                        <td style="width: 22%;">
+                                                            @foreach($state as $item)
+                                                            @if(isset($items->preference_first))
+                                                            @if($items->preference_first==$item->id)
+                                                            <span>{{ $item->name}}</span>
+                                                            @endif
+                                                            @else
+                                                            <span>{{ $item->name}}</span>
+                                                            @endif
+                                                            @endforeach
+                                                        </td>
+                                                        <td style="width: 28%;"><b>Preference 2</b></td>
+                                                        <td style="width: 22%;">
+                                                            @foreach($state as $item)
+                                                            @if(isset($items->preference_second))
+                                                            @if($items->preference_second==$item->id)
+                                                            <span>{{ $item->name}}</span>
+                                                            @endif
+                                                            @else
+                                                            <span>{{ $item->name}}</span>
+                                                            @endif
+                                                            @endforeach
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Preference 3</b></td>
+                                                        <td>
+                                                            @foreach($state as $item)
+                                                            @if(isset($items->preference_second))
+                                                            @if($items->preference_third==$item->id)
+                                                            <span>{{ $item->name}}</span>
+                                                            @endif
+                                                            @else
+                                                            <span>{{ $item->name}}</span>
+                                                            @endif
+                                                            @endforeach
+                                                        </td>
+                                                        <td><b>Proposed Area of Land (in Acre)</b></td>
+                                                        <td>
+                                                            @if(isset($items->area_of_land))
+                                                            {{ $items->area_of_land }}
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                    @if($type == 'SG004')
+                                                    <tr>
+                                                        <td><b>Connectivity</b></td>
+                                                        <td>{{ $items->connectivity }}</td>
+                                                        <td><b>Do you want to setup for solar park MNRE</b></td>
+                                                        <td>{{ $items->setup_for_solar_park_mnre }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Do you want status of solar park from MNRE</b></td>
+                                                        <td>{{ $items->status_of_solar_park }}</td>
+                                                        <td><b>Do you want to avail grant form MNRE</b></td>
+                                                        <td>{{ $items->grant_form_mnre }}</td>
+                                                    </tr>
+                                                    @endif
+                                                    @if($type == 'SG003' || $type == 'SG004')
+                                                    @if($type != 'SG004')
+                                                    <tr>
+                                                        <td><b>Have you received any approval of <br>Park from Government of India</b></td>
+                                                        <td colspan="3">{{ $items->approval_of_park }}</td>
+                                                    </tr>
+                                                    @endif
+                                                    <tr>
+                                                        <td><b>Sanction Number</b></td>
+                                                        <td>{{ $items->sanction_number }}</td>
+                                                        <td><b>Sanction Date</b></td>
+                                                        <td>{{ dmy($items->sanction_date) }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Sanction Capacity (Megawatt)</b></td>
+                                                        <td>{{ $items->sanction_capacity }}</td>
+                                                        <td><b>Preferred Sub Station</b></td>
+                                                        <td>
+                                                            @foreach($station as $item)
+                                                            @if($items->sub_station==$item->id)
+                                                            <span>{{ $item->name}}</span>
+                                                            @endif
+                                                            @endforeach
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Voltage (Kilowatt)</b></td>
+                                                        <td colspan="3">{{ $items->voltage }}</td>
+                                                    </tr>
+                                                    @endif
+                                                </tbody>
+                                            </table>
+                                            @endif
+                                            @if($type == 'SG002')
+                                            <table  id="dataTable" class="table table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <td><b>Preferred Sub Station 1</b></td>
+                                                        <td>
+                                                            @foreach($station as $item)
+                                                            @if($items->preference_first_substation==$item->id)
+                                                            <span>{{ $item->name}}</span>
+                                                            @endif
+                                                            @endforeach
+                                                        </td>
+                                                        <td><b>Preferred Sub Station 2</b></td>
+                                                        <td>
+                                                            @foreach($station as $item)
+                                                            @if($items->preference_second_substation==$item->id)
+                                                            <span>{{ $item->name}}</span>
+                                                            @endif
+                                                            @endforeach
+                                                        </td>
+                                                        <td><b>Preferred Sub Station 3</b></td>
+                                                        <td>
+                                                            @foreach($station as $item)
+                                                            @if($items->preference_third_substation==$item->id)
+                                                            <span>{{ $item->name}}</span>
+                                                            @endif
+                                                            @endforeach
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>At Voltage</b></td>
+                                                        <td>{{ $items->at_voltage }}</td>
+                                                        <td><b>Is Connectivity Required</b></td>
+                                                        <td>{{ $items->is_connectivity }}</td>
+                                                        <td><b>Load Capacity (Megawatt) </b></td>
+                                                        <td>{{ $items->load_capacity }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Connectivity</b></td>
+                                                        <td>{{ $items->connectivity }}</td>
+                                                        <td><b>User Type </b></td>
+                                                        <td colspan="3">{{ $items->usertype }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            @endif
+                                            @if($type == 'SG009')
+                                            <table  id="dataTable" class="table table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <td><b>Project Details</b></td>
+                                                        <td>{{ $items->remark}}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                @else
+                                <div class="alert alert-danger" role="alert">
+                                    No records Found!.
+                                </div>
+                                @endif
+                                @if(count($summary) > 0)
+                                <div class="card-header mb-2">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5>Activity</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table  id="dataTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">S.No.</th>
+                                            <th scope="col">Steps</th>
+                                            <th scope="col">Current Status</th>
+                                            <th scope="col">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($summary as $key => $item) { ?>
+                                            <tr>
+                                                <th scope="row"><?= $key + 1; ?></th>
+                                                <td><?= $item->type; ?></td>
+                                                <td>
+                                                    <strong class='badge bg-light' style="color: black;font-size: 12px;">
+                                                        <?= $item->application_status; ?>
+                                                    </strong>
+                                                </td>
+                                                <td><?= dmy($item->created_at); ?></td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

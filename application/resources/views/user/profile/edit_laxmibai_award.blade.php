@@ -1,0 +1,546 @@
+@extends('layouts/layout')
+@section('content')
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="bhoechie-tab-container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="bhoechie-tab-content">
+                        <div class="form-scroll">
+                            <form action="{{url('/update_laxmibai_award')}}" method="post" enctype="multipart/form-data"  id="ajxReload" class="needs-validation" novalidate="">
+                                @csrf
+                                <div class="row">
+                                    @foreach($laxmi_award as $item)
+                                    <input type="hidden" name="application_no" value="{{$item->application_no}}">
+                                    <div class="col-md-12">
+                                        <h5 class="subheading">Nomination Form for Rani Laxmi Bai Award/रानी लक्ष्मी पुरस्कार हेतु नामांकन</h5>
+                                    </div>
+                                    <!-- basic Detail -->
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>1. Name / नाम</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" value="{{$user->fullname}}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>2. Aadhar Number / आधार कार्ड</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" value="{{$user->aadhar_no}}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>3. Mobile Number / मोबाइल नंबर</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" value="{{$user->mobile}}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>4. Email ID / ईमेल आईडी</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" value="{{$user->email}}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end basic detail -->
+                                    <div class="col-md-12">
+                                        <h5 class="subheading">A. Basic Details/सामान्य विवरण</h5>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="placeholder">Which Sport do/did you play?<br>कौन सा खेल खेलते थे/हैं?<span class="text-danger">*</span></label>
+                                            <select class="form-select sport_type" name="sport_type" required>
+                                                <option value="">Select</option>
+                                                @foreach ($sport_type as $type)
+                                                <option value="{{$type->id}}" {{ $item->sport_type === $type->id ? 'selected' : '' }}>{{$type->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="placeholder">Highest Educational Qualification<br>उच्चतम शैक्षणिक योग्यता<span class="text-danger">*</span></label>
+                                            <select class="form-control form-select dropdown" required id="qualification" name="qualification">
+                                                <option value="" selected="selected" disabled="disabled">Select</option>
+                                                <option {{ $item->qualification === "10" ? 'selected' : '' }} value="10">10th / High School</option>
+                                                <option {{ $item->qualification === "12" ? 'selected' : '' }} value="12">12th / Intermediate</option>
+                                                <option {{ $item->qualification === "graduation" ? 'selected' : '' }} value="graduation">Graduation</option>
+                                                <option {{  $item->qualification ==="post_graduation" ? 'selected' : '' }} value="post_graduation">Post-Graduation </option>
+                                                <option {{ $item->qualification === "phd" ? 'selected' : '' }} value="phd">PhD</option>
+                                                <option {{ $item->qualification === "other" ? 'selected' : '' }} value="other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Upload Certificate of Highest Educational Qualification<br>उच्चतम शैक्षणिक योग्यता का प्रमाणपत्र अपलोड करें<span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="file" name="qualification_doc" class="form-control" onchange="getfileextp(this.value,1)" id="File1" aria-describedby="inputGroupFileAddon05" aria-label="Upload">
+                                                <input type="hidden" value="{{$item->qualification_doc}}" name="qualification_doc1">
+                                                    @if($item->qualification_doc !='')
+                                                    @php
+                                                    $img = url('storage/laxmibai_award').'/'.$item->qualification_doc;
+                                                    $img1 = url('public/images/view.jpg');
+                                                    $doc = explode('.',$item->qualification_doc);
+                                                    @endphp
+                                                    <img src="{{$img1}}" role="button" onclick="appendImage('{{$img}}','{{$doc[1]}}')" class="img-fluid" />
+                                                    @endif
+                                            </div>
+                                            <span class="note">(File Format: PDF | Max File Size: 2 MB)<br>(फाइल का प्रारूप: PDF | फाइल का अधिकतम साइज़: 2 MB)</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Upload Domicile Certificate of UP
+                                                <br>उत्तर प्रदेश का मूल निवास प्रमाण पत्र अपलोड करें*<span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="file" name="domicile_certificate" class="form-control" onchange="getfileextp(this.value,2)" id="File2" aria-describedby="inputGroupFileAddon05" aria-label="Upload">
+                                                <input type="hidden" value="{{$item->domicile_certificate}}" name="domicile_certificate1">
+                                                @if($item->domicile_certificate !='')
+                                                @php
+                                                $img = url('storage/laxmibai_award').'/'.$item->domicile_certificate;
+                                                $img1 = url('public/images/view.jpg');
+                                                $doc = explode('.',$item->domicile_certificate);
+                                                @endphp
+                                                <img src="{{$img1}}" role="button" onclick="appendImage('{{$img}}','{{$doc[1]}}')" class="img-fluid" />
+                                                @endif
+                                            </div>
+                                            <span class="note">(File Format: PDF | Max File Size: 2 MB)<br>(फाइल का प्रारूप: PDF | फाइल का अधिकतम साइज़: 2 MB)</span>
+                                        </div>
+                                    </div>
+                                    @if($u_type=="veteran")
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>5. Upload Highschool/Matriculation Certificate<br>हाईस्कूल/मैट्रिकुलेशन प्रमाणपत्र अपलोड करें<span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="file" name="highschool_certificate" class="form-control" onchange="getfileextp(this.value,8)" id="File8" aria-describedby="inputGroupFileAddon05" aria-label="Upload">
+                                                <input type="hidden" value="{{$item->highschool_certificate}}" name="highschool_certificate1">
+                                                @if($item->highschool_certificate !='')
+                                                @php
+                                                $img = url('storage/laxmibai_award').'/'.$item->highschool_certificate;
+                                                $img1 = url('public/images/view.jpg');
+                                                $doc = explode('.',$item->highschool_certificate);
+                                                @endphp
+                                                <img src="{{$img1}}" role="button" onclick="appendImage('{{$img}}','{{$doc[1]}}')" class="img-fluid" />
+                                                @endif
+                                            </div>
+                                            <span class="note">(File Format: PDF | Max File Size: 2 MB)<br>(फाइल का प्रारूप: PDF | फाइल का अधिकतम साइज़: 2 MB)</span>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <input type="hidden" name="dob" value={{$dob}} id="dob" />
+                                    <div class="col-md-12">
+                                        <h5 class="subheading">B. Sports Achievements/खेल क्षेत्र में उपलब्धियां (प्रमाण-पत्र राज्य खेल संघ/एसोसिएशन के सचिव/महासचिव के हस्ताक्षर से प्रमाणित होने चाहिए)</h5>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                                <table class="table table-bordered" id="dynamic_field">
+                                                    <thead>
+                                                        <tr>
+                                                            <td rowspan="2"><label>Sports Competition Name <br>खेलकूद प्रतियोगिता का नाम</label> <span class="text-danger">*</span></td>
+                                                            <td rowspan="2"><label>Sport Name<br>खेल का नाम</label> <span class="text-danger">*</span></td>
+                                                            <td rowspan="2"><label>Position / Medal<br>पद का नाम / पदक</label> <span class="text-danger">*</span></td>
+                                                            <td colspan="2" class="text-center"><label>Period of Competition<br>प्रतियोगिता की अवधि</label> <span class="text-danger">*</span></td>
+                                                            <td rowspan="2"><label>Place<br>स्थान</label> <span class="text-danger">*</span></td>
+                                                            <td rowspan="2"><label>Sport Event Detail</label> <span class="text-danger">*</span></td>
+                                                            <td rowspan="2"><label>Upload Relevant Certificate<br>प्रासंगिक प्रमाण पत्र अपलोड करें<span class="text-danger">*</span><br><span class="note">(File Format: PDF | Max File Size: 2 MB)<br>(फाइल का प्रारूप: PDF | फाइल का अधिकतम साइज़: 2 MB)</span></label></td>
+                                                            <td rowspan="2"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><label>From </label></td>
+                                                            <td><label>To </label></td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if($sport_achievement->count() == 0)
+                                                        <tr>
+                                                            <td>
+                                                                <select name="sport_competition_name[]" required class="form-select">
+                                                                    <option value="">Select</option>
+                                                                    @foreach ($sport_competition as $type)
+                                                                    <option value="{{$type->id}}" {{ old('sport_competition_name') === $type->id ? 'selected' : '' }}>{{$type->name}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-select" style="pointer-events: none;" name="sport_name[]" required>
+                                                                    <option value="">Select</option>
+                                                                    @foreach ($sport_type as $type)
+                                                                    <option value="{{$type->id}}" {{ $selected_sport==$type->id ? 'selected' : '' }} {{ old('sport_type') === $type->id ? 'selected' : '' }}>{{$type->name}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                {{-- <input type="text" required value="{{old('sport_name[]') }}" name="sport_name[]" placeholder="Sports Name" class="form-control name_email"> --}}
+                                                            </td>
+                                                            <td style="width: 100px;">
+                                                                <select class="form-select" name="sport_achievement_position[]" required>
+                                                                    <option value="">Select</option>
+                                                                    <option {{old('sport_achievement_position')=='1st / Gold'?'Selected':''}} value="1st / Gold">1st / Gold</option>
+                                                                    <option {{old('sport_achievement_position')=='2nd / Silver'?'Selected':''}} value="2nd / Silver">2nd / Silver</option>
+                                                                    <option {{old('sport_achievement_position')=='3rd / Bronze'?'Selected':''}} value="3rd / Bronze">3rd / Bronze</option>
+                                                                    <option {{old( 'sport_achievement_position')=='Participant' ? 'Selected': ''}} value="Participant">Participant</option>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" onpaste="return false;" ondrop="return false;" onkeypress="return false" id="doc" autocomplete="off" required value="{{old('competition_from_date')}}" name="competition_from_date[]" data-language="en" placeholder="dd-mm-yyyy" required>
+                                                            </td>
+                                                            <td><input type="text" class="form-control to-to-to" onpaste="return false;" ondrop="return false;" onkeypress="return false" id="to" autocomplete="off" required value="{{old('competition_to_date')}}" name="competition_to_date[]" data-language="en" placeholder="dd-mm-yyyy" required></td>
+                                                            <td><input type="text" required value="{{old('sport_place') }}" name="sport_place[]" placeholder="Place" class="form-control name_email"></td>
+                                                            <td>
+                                                                <div class="input-group">
+                                                                    <input type="file" required name="sport_achievement_docs[]" class="form-control" onchange="getfileextp(this.value,3)" id="File3" aria-describedby="inputGroupFileAddon05" aria-label="Upload">
+                                                                </div>
+                                                            </td>
+                                                            <td><input type="text" required value="{{old('event_detail') }}" name="event_details[]" placeholder="Sport Event Detail" class="form-control"></td>
+                                                            <td><button type="button" name="add" id="add" class="btn btn-primary mt-1">Add</button></td>
+                                                        </tr>
+                                                        @else
+                                                        @foreach( $sport_achievement as $key=>$post)
+                                                        <tr id="rowk{{$key}}">
+                                                            <td>
+                                                                <select name="sport_competition_name[]" required class="form-select">
+                                                                    <option value="">Select</option>
+                                                                    @foreach ($sport_competition as $type)
+                                                                    <option value="{{$type->id}}" {{$post->sport_achievement==$type->id ?'Selected':''}}>{{$type->name}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-select" style="pointer-events: none;" name="sport_name[]" required>
+                                                                    <option value="">Select</option>
+                                                                    @foreach ($sport_type as $type)
+                                                                    <option value="{{$type->id}}" {{ $selected_sport==$type->id ? 'selected' : '' }} {{ old('sport_type') === $type->id ? 'selected' : '' }}>{{$type->name}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </td>
+                                                            <td style="width: 100px;">
+                                                                <select class="form-select" name="sport_achievement_position[]" required>
+                                                                    <option value="">Select</option>
+                                                                    <option {{$post->sport_achievement_position=='1st / Gold'?'Selected':''}} value="1st / Gold">1st / Gold</option>
+                                                                    <option {{$post->sport_achievement_position=='2nd / Silver'?'Selected':''}} value="2nd / Silver">2nd / Silver</option>
+                                                                    <option {{$post->sport_achievement_position=='3rd / Bronze'?'Selected':''}} value="3rd / Bronze">3rd / Bronze</option>
+                                                                    <option {{$post->sport_achievement_position=='Participant'?'Selected':''}} value="Participant">Participant</option>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control firstDate dateTimeee"  onchange="checkDate({{$key}})" onpaste="return false;" ondrop="return false;" onkeypress="return false" id="doc{{$key}}" autocomplete="off" required value="{{$post->competition_from_date}}" name="competition_from_date[]" data-language="en" placeholder="dd-mm-yyyy" required>
+                                                            </td>
+                                                            <td><input type="text" class="form-control to-to-to dateTimeee" onchange="checkDate({{$key}})" onpaste="return false;" ondrop="return false;" onkeypress="return false" id="{{$key}}to" autocomplete="off" required value="{{$post->competition_to_date}}" name="competition_to_date[]" data-language="en" placeholder="dd-mm-yyyy" required></td>
+
+                                                            <td><input type="text" required value="{{$post->sport_achievement_State_Institution }}" name="sport_place[]" placeholder="Place" class="form-control name_email"></td>
+                                                            <td>
+                                                                <div class="input-group">
+                                                                    <input type="file" name="sport_achievement_docs[]" class="form-control" onchange="getfileextp(this.value,3)" id="File3" aria-describedby="inputGroupFileAddon05" aria-label="Upload">
+                                                                    <input type="hidden" value="{{$post->sport_achievement_docs }}" name="sport_achievement_docs1[]">
+                                                                    @if($post->sport_achievement_docs !='')
+                                                                    @php
+                                                                    $img = url('storage/laxmibai_award').'/'.$post->sport_achievement_docs;
+                                                                    $img1 = url('public/images/view.jpg');
+                                                                    $doc = explode('.',$post->sport_achievement_docs);
+                                                                    @endphp
+                                                                    <img src="{{$img1}}" role="button" onclick="appendImage('{{$img}}','{{$doc[1]}}')" class="img-fluid" />
+                                                                    @endif
+                                                                </div>
+                                                            </td>
+                                                            <td><input type="text" required value="{{$post->event_details }}" name="event_details[]" placeholder="Sport Event Detail" class="form-control"></td>
+                                                            @if(!isset($sport_achievement) || ($key == 0))
+                                                            <td><button type="button" name="add" id="add" class="btn btn-primary mt-1">Add</button></td>
+                                                            @else
+                                                            <td><button type="button" name="remove" id="{{$key}}" class="btn btn-danger mt-1 px-2 btn_remove"><span class="far fa-trash-alt"></span></button></td>
+                                                            @endif
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                    @endif
+                                                </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <h5 class="subheading">C. Other Achievements/खेल क्षेत्र में अन्य उपलब्धियां</h5>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <table class="table table-bordered" id="dynamic_field3">
+                                                @if($other_achievement->count() === 0)
+                                                <tbody>
+                                                    <tr>
+                                                        <td><input type="text" value="{{old('other_achievement_name[]') }}" name="other_achievement_name[]" placeholder="Sports Achievements" class="form-control name_email"></td>
+                                                        <td>
+                                                            <div class="input-group">
+                                                                <input type="file" name="other_achievement_docs[]" class="form-control" onchange="getfileextp(this.value,5)" id="File5" aria-describedby="inputGroupFileAddon05" aria-label="Upload">
+                                                            </div>
+                                                        </td>
+                                                        <td><button type="button" name="add" id="add3" class="btn btn-primary mt-1">Add</button></td>
+                                                    </tr>
+                                                </tbody>
+                                                @else
+                                                <tbody>
+                                                @foreach( $other_achievement as $key=>$post)
+                                                
+                                                    <tr id="row{{$key}}">
+                                                        <td><input type="text" required value="{{$post->achievement_name }}" name="other_achievement_name[]" placeholder="Sports Achievements" class="form-control name_email"></td>
+                                                        <td>
+                                                            <div class="input-group">
+                                                                <input type="file" name="other_achievement_docs[]" class="form-control" onchange="getfileextp(this.value,6)" id="File6" aria-describedby="inputGroupFileAddon05" aria-label="Upload">
+                                                                <input type="hidden" value="{{$post->achievement_docs }}" name="other_achievement_docs1[]">
+                                                                @if($post->achievement_docs !='')
+                                                                    @php
+                                                                    $img = url('storage/laxmibai_award').'/'.$post->achievement_docs;
+                                                                    $img1 = url('public/images/view.jpg');
+                                                                    $doc = explode('.',$post->achievement_docs);
+                                                                    @endphp
+                                                                    <img src="{{$img1}}" role="button" onclick="appendImage('{{$img}}','{{$doc[1]}}')" class="img-fluid" />
+                                                                    @endif
+                                                            </div>
+                                                        </td>
+                                                        @if(!isset($other_achievement) || ($key == 0))
+                                                        <td><button type="button" name="add" id="add3" class="btn btn-primary mt-1">Add</button></td>
+                                                        @else
+                                                        <td><button type="button" name="remove" id="{{$key}}" class="btn btn-danger mt-1 px-2 btn_remove"><span class="far fa-trash-alt"></span></button></td>
+                                                        @endif
+                                                    </tr>
+                                               
+                                                @endforeach
+                                                </tbody>
+                                                @endif
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <h5 class="subheading">D. Bank Account Details/बैंक खाते का विवरण</h5>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="placeholder">IFSC<br>आईएफएससी<span class="text-danger">*</span></label>
+                                            <input type="text" value="{{$item->bank_ifsc}}" pattern="[A-Z]{4}0[A-Z0-9]{6}" name="bank_ifsc" required class="form-control" onblur="getBankDetails(this.value)" id="ifscupper">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="placeholder">Name of Bank<br>बैंक का नाम*<span class="text-danger">*</span></label>
+                                            <input name="bank_name" value="{{$item->bank_name}}" required type="text" class="form-control" id="bankName">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="placeholder">Branch<br>शाखा<span class="text-danger">*</span></label>
+                                            <input name="bank_branch" value="{{$item->bank_branch}}" required type="text" class="form-control" id="bank_branch">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="placeholder">Bank Account No.<br>बैंक खाता संख्या<span class="text-danger">*</span></label>
+                                            <input type="text" value="{{$item->bank_acc_no}}" pattern=".{9,18}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="bank_acc_no" required class="form-control">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="placeholder">Account Holder Name<br>खाता धारक का नाम<span class="text-danger">*</span></label>
+                                            <input type="text" value="{{$item->acc_holder_name}}" name="acc_holder_name" required class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="placeholder">PAN<br>पैन कार्ड<span class="text-danger">*</span></label>
+                                            <input type="text" value="{{$item->pan}}" pattern="[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}" style="text-transform:uppercase" name="pan" required class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="placeholder">Mobile No. (registered with Bank Account)<br>मोबाइल नंबर (बैंक खाते के साथ जो पंजीकृत है)<span class="text-danger">*</span></label>
+                                            <input type="text" value="{{$item->mobile_registered_in_bank}}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="mobile_registered_in_bank" required class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label class="placeholder">Any other relevant information applicant wants to specify?<br>कोई अन्य प्रासंगिक जानकारी आवेदक निर्दिष्ट करना चाहते हैं?</label>
+                                            <input value="{{$item->other_relevant_information_applicant}}" name="other_relevant_information_applicant" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                            <div class="form-group mb-3">
+                                                <label class="placeholder">Upload Notary Affidavit
+                                                    <br> नोटरी शपथ पत्र अपलोड करें
+                                                <span class="text-danger">*</span>
+                                                    <a download href="{{url('public/award/Laxman-RLB-notari.pdf')}}"><span class="text-danger">Sample File</span></a></label>
+                                                <div class="input-group">
+                                                <input onchange="getfileextp(this.value,1044)" id="File1044" class="form-control" type="file" id="formFile" {{ isset($item->notary_affidavit_doc)  ? '': 'required'  }} name="notary_affidavit_doc">
+                                                <input type="hidden" value="{{ isset($item->notary_affidavit_doc)  ? $item->notary_affidavit_doc : old('notary_affidavit_doc')  }}" name="notary_affidavit_doc1">
+                                                    @if(isset($item->notary_affidavit_doc))
+                                                    @php
+                                                    $img = url('public/laxmibai_award/notary_affidavit_doc').'/'.$item->notary_affidavit_doc;
+                                                    $img1 = url('public/images/view.jpg');
+                                                    $doc = explode('.',$item->notary_affidavit_doc);
+
+                                                    @endphp
+                                                    <img src="{{$img1}}" role="button" onclick="appendImage('{{$img}}','{{$doc[1]}}')" class="img-fluid" />
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                
+                                @endforeach
+                                <div class="bhoechie-footer">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-4 d-grid">
+                                            <button type="submit" class="btn btn-info">Save & Proceed/दर्ज करें व आगे बढ़ें</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+@push('custom-scripts')
+<script>
+    $(document).ready(function() {
+
+        var start = $("#dob").val();
+        var end = (new Date()).getFullYear();
+        var yrRange = start + ":" + end;
+        var checkkk = 0;
+        $(".dateTimeee").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            //  minDate: '-60Y',
+            minDate: new Date(start, 4 - 1, 1),
+            yearRange: yrRange,
+            maxDate: '0',
+            dateFormat: 'dd-mm-yy'
+        });
+
+        $("#doc").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            minDate: '-60Y',
+            yearRange: yrRange,
+            maxDate: '0',
+            dateFormat: 'dd-mm-yy'
+        });
+        $("#doc").change(function() {
+            var min = new Date($("#doc").val());
+            var st = $("#doc").datepicker('getDate');
+            var start = new Date(st);
+            if (checkkk == 0) {
+                $("#to").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    minDate: start,
+                    yearRange: yrRange,
+                    maxDate: '0',
+                    dateFormat: 'dd-mm-yy'
+                });
+            } else {
+                $("#to").datepicker('option', {
+                    minDate: start
+                });
+            }
+
+            checkkk = 1;
+            // }, 5);
+        })
+
+        var i = 1;
+        var length;
+        //var addamount = 0;
+        var addamount = 700;
+
+        $("#add3").click(function() {
+
+
+            addamount += 700;
+            console.log('amount: ' + addamount);
+            i++;
+            $('#dynamic_field3').append('<tr id="row' + i + '"><td><input type="text" name="other_achievement_name[]" required placeholder="Sports Achievements" class="form-control name_email"/></td><td><div class="input-group"><input type="file" required name="other_achievement_docs[]" class="form-control" onchange="getfileextp(this.value,1' + i + ')" id="File1' + i + '" aria-describedby="inputGroupFileAddon05" aria-label="Upload"></div></td><td><button type="button" name="remove" id="' + i + '" class="btn btn-danger mt-1 px-2 btn_remove"><span class="far fa-trash-alt"></span></button></td></tr>');
+        });
+
+        $(document).on('click', '.btn_remove', function() {
+            addamount -= 700;
+            console.log('amount: ' + addamount);
+
+
+            var button_id = $(this).attr("id");
+            $('#row' + button_id + '').remove();
+        });
+
+
+
+        $("#submit").on('click', function(event) {
+            var formdata = $("#add_name3").serialize();
+            console.log(formdata);
+
+            event.preventDefault()
+
+            $.ajax({
+                url: "action.php",
+                type: "POST",
+                data: formdata,
+                cache: false,
+                success: function(result) {
+                    alert(result);
+                    $("#add_name3")[0].reset();
+                }
+            });
+
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+
+        var i = 100;
+        var length;
+        //var addamount = 0;
+        var addamount = 700;
+
+        $("#add").click(function() {
+
+            var start = $("#dob").val();
+            var end = (new Date()).getFullYear();
+            var yrRange = start + ":" + end;
+            addamount += 700;
+            console.log('amount: ' + addamount);
+            i++;
+            // $('#dynamic_field').append('<tr id="row'+i+'"><td><select name="sport_competition_name[]" required class="form-select" class="form-control name_list">@foreach ($sport_competition as $type) <option  value="{{$type->id}}"  {{ old('sport_achievement') === $type->id ? 'selected' : '' }}>{{$type->name}}</option> @endforeach</td><td><input type="text" name="sport_name[]"  required placeholder="Sport Name" class="form-control name_email"/></td><td><select class="form-select" name="sport_achievement_position[]" required> <option value="">Select</option> <option  {{old('sport_achievement_position')=='Gold'?'Selected':''}} value="Gold">Gold</option> <option  {{old('sport_achievement_position')=='Silver'?'Selected':''}} value="Silver">Silver</option> <option  {{old('sport_achievement_position')=='Bronze'?'Selected':''}} value="Bronze">Bronze</option> </select></td><td><input type="text" class="form-control" onkeypress="return false" id="doc" autocomplete="off" required value="{{old('competition_from_date')}}"  name="competition_from_date[]" data-language="en" placeholder="dd-mm-yyyy" required></td><td><input type="text" class="form-control to-to-to" onkeypress="return false" id="to" autocomplete="off" required value="{{old('competition_to_date')}}"  name="competition_to_date[]" data-language="en" placeholder="dd-mm-yyyy" required></td><td><input type="text" required value="{{old('sport_place[]') }}" name="sport_place[]" placeholder="Place" class="form-control name_email"></td><td><div class="input-group"><input type="file" name="sport_achievement_docs[]" required class="form-control"   onchange="getfileext(this.value,2'+i+')" id="File2'+i+'" aria-describedby="inputGroupFileAddon05" aria-label="Upload"></div></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger mt-1 px-2 btn_remove"><span class="far fa-trash-alt"></span></button></td></tr>');
+            $('#dynamic_field').append('<tr id="row' + i + '"><td><select name="sport_competition_name[]" required class="form-select"  class="form-control name_list"><option value="">Select</option>@foreach ($sport_competition as $type) <option  value="{{$type->id}}" >{{$type->name}}</option> @endforeach</td><td><select class="form-select" style="pointer-events: none;" name="sport_name[]" required> <option value="">Select</option> @foreach ($sport_type as $type) <option {{ $selected_sport==$type->id ? 'selected' : '' }} value="{{$type->id}}">{{$type->name}}</option> @endforeach </select></td><td><select class="form-select" name="sport_achievement_position[]" required> <option value="">Select</option> <option  {{old('sport_achievement_position ')=='1 st / Gold '?'Selected ':''}} value="1st / Gold">1st / Gold</option> <option  {{old('sport_achievement_position ')=='2 nd / Silver '?'Selected ':''}} value="2nd / Silver">2nd / Silver</option> <option  {{old('sport_achievement_position ')=='3 rd / Bronze '?'Selected ':''}} value="3rd / Bronze">3rd / Bronze</option>  <option {{old( 'sport_achievement_position')=='Participant' ? 'Selected': ''}} value="Participant">Participant</option></select></td><td><input type="text" class="form-control firstDate dateTimeee" onchange="checkDate('+i+')" onpaste="return false;" ondrop="return false;" onkeypress="return false" id="doc' + i + '" autocomplete="off" required value="{{old('competition_from_date ')}}"  name="competition_from_date[]" data-language="en" placeholder="dd-mm-yyyy" required></td><td><input type="text" class="form-control to-to-to dateTimeee" onpaste="return false;" ondrop="return false;" onchange="checkDate('+i+')" onkeypress="return false" id="' + i + 'to" autocomplete="off" required value="{{old('				competition_to_date ')}}"  name="competition_to_date[]" data-language="en" placeholder="dd-mm-yyyy" required></td><td><input type="text" required value="{{old('sport_place[]') }}" name="sport_place[]" placeholder="Place" class="form-control name_email"></td><td><div class="input-group"><input type="file" name="sport_achievement_docs[]" required class="form-control"   onchange="getfileextp(this.value,2' + i + ')" id="File2' + i + '" aria-describedby="inputGroupFileAddon05" aria-label="Upload"></div></td><td><input type="text" required value="" name="event_details[]" placeholder="Sport Event Detail" class="form-control"></td><td><button type="button" name="remove" id="' + i + '" class="btn btn-danger mt-1 px-2 btn_remove"><span class="far fa-trash-alt"></span></button></td></tr>');
+            $(".dateTimeee").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                //   minDate: '-60Y',
+                minDate: new Date(start, 4 - 1, 1),
+                yearRange: yrRange,
+                maxDate: '0',
+                dateFormat: 'dd-mm-yy'
+            });
+
+            // $('#dynamic_field').append('<tr id="row'+i+'"><td><select name="sport_achievement[]" required class="form-select" class="form-control name_list"><option>National</option></td><td><input type="text" name="sport_achievement_name[]"  required placeholder="Sports Achievements" class="form-control name_email"/></td><td><select name="sport_achievement_year[]" required class="form-select"> <option value="">Select</option> @for($year=$dob; $year<=date('Y'); $year++){ <option   value="{{$year}}">{{$year}}</option> @endfor </select></td><td><input type="text" name="sport_achievement_position[]" required placeholder="Position" class="form-control name_email"/></td><td><input type="text" name="sport_achievement_State_Institution[]" required placeholder="State/Institution" class="form-control name_email"/></td><td><div class="input-group"><input type="file" name="sport_achievement_docs[]" required class="form-control" onchange="getfileext(this.value,2'+i+')" id="File1'+i+'"aria-describedby="inputGroupFileAddon05" aria-label="Upload"></div></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger mt-1 px-2 btn_remove"><span class="far fa-trash-alt"></span></button></td></tr>');
+        });
+
+        $(document).on('click', '.btn_remove', function() {
+            addamount -= 700;
+            console.log('amount: ' + addamount);
+
+
+            var button_id = $(this).attr("id");
+            $('#row' + button_id + '').remove();
+        });
+
+
+
+
+    });
+</script>
+@endpush

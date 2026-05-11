@@ -1,0 +1,669 @@
+@extends('layouts/admin_layout')
+@section('content')
+
+<div class="row">
+    <div class="col-12">
+        <div class="bhoechie-tab-container">
+            <div class="row">
+                <h4 class="mb-2"> &nbsp;
+                    <button type="button" data-print="modal" class="btn btn-sm  btn-outline-primary ms-2 float-end " onclick="PrintDoc()" style="width: auto;"><span class="icons icon-printer"></span></button>
+                </h4>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="bhoechie-tab-menu">
+                        <div class="list-group">
+                            <a class="list-group-item active" style="width: 100%;">
+                                <span class="fas fa-file-pdf"></span>
+                                Application to Eklavya Krida Kosh
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab">
+                <div class="bhoechie-tab-content active">
+                    <div class="form-scroll">
+                        <div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="profile-head">
+                                        <div class="tab-content profile-tab" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                                <div class="row">
+                                                    <div class="col-md-12" id="prodiv">
+                                                        <table class="dn" style="width: 100%; margin-bottom: 5px;" border="0">
+                                                            <tr>
+                                                                <td colspan="2" align="center" style="position: relative; border: 0; padding-bottom: 5px;">
+                                                                    <div style="border-bottom: 0px solid #000; padding-bottom: 2vw;">
+                                                                    <img id="logo" src="{{ url('/public') }}/assets_admin/images/logo.png" style="display:none;position: absolute; width: 70px; top: -7px; left: 0;"/> 
+                                                                        <div style="font-size: 25px; font-weight: bold;">
+                                                                            <!-- Department of Sports -->
+                                                                            Khel Sathi Portal / खेल साथी पोर्टल
+                                                                        </div>
+                                                                        <div style="font-size: 18px; font-weight: bold;">
+                                                                            Government of Uttar Pradesh/उत्तर प्रदेश सरकार
+                                                                        </div>
+                                                                        <div style="font-size: 18px; font-weight: bold;">Online System for Eklavya Krida Kosh</div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        @foreach($articles as $article)
+                                                        <p class="bg-light"><strong>Application no. / आवेदन क्रमांक:-</strong> <b>{{$article->application_no}}</b>
+                                                        </p>
+                                                        <table id="dataTable" class="table table-bordered" border="1" style="border-collapse: collapse; width: 100%;">
+                                                            <tr>
+                                                                <td colspan="6" class="bg-light">
+                                                                    <strong>Basic Details/सामान्य विवरण</strong>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                    <td style="width: 15%"><strong> Purpose</strong></td>
+                                                    <td style="width: 20%">
+                                                        @if ($article->purpose == 1)
+                                                            Provide fellowships to athletes to enhance their performance and
+                                                            motivation.
+                                                        @elseif ($article->purpose == '2')
+                                                            Prepare athletes for National and International competitions.
+                                                        @elseif ($article->purpose == 3)
+                                                            Offer International Training opportunities and expertise to both
+                                                            Athletes and Coaches.
+                                                        @elseif ($article->purpose == 4)
+                                                            Ensure that athletes have access to comprehensive Health
+                                                            Insurance coverage.
+                                                        @elseif ($article->purpose == 5)
+                                                            Fund “Sports Research Projects” through financial grants.
+                                                        @elseif ($article->purpose == 6)
+                                                            Allocate additional incentives for athletes with disabilities,
+                                                            transgender athletes, and female athletes.
+                                                        @elseif ($article->purpose == 7)
+                                                            Organize promotional visits for sports organizations to
+                                                            districts in UP for talent hunting.
+                                                        @elseif ($article->purpose == 8)
+                                                            Supply athletes with the necessary sports equipment they
+                                                            require.
+                                                        @endif
+                                                    </td>
+                                                    <td style="width: 15%"><strong>Full Name</strong></td>
+                                                    <td style="width: 20%">{{ $article->fullname }}</td>
+                                                    <td rowspan="5" colspan="2">
+                                                        <div class="text-center" style="padding: 5px;" align="center"> <img
+                                                                src="{{ URL::asset('storage/app/public/award/') . '/' . $article->photograph_doc }}"
+                                                                class="img-fluid" style="width: 140px;" /> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Email ID </strong></td>
+                                                    <td>{{ $article->email }}</td>
+                                                    <td><strong>Mobile Number</strong></td>
+                                                    <td>{{ $article->mobile }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" class="bg-light"><strong>Personal Details</strong>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Father Name</strong></td>
+                                                    <td>{{ $article->father_name }}</td>
+                                                    <td><strong>Mother Name</strong></td>
+                                                    <td>{{ $article->mother_name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Gender</strong></td>
+                                                    <td>
+                                                        @if ($article->gender == 1)
+                                                            Male
+                                                        @else
+                                                            Female
+                                                        @endif
+                                                    </td>
+                                                    <td><strong>Date of Birth</strong></td>
+                                                    <td>{{ dmy($article->dob) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Aadhaar No.</strong></td>
+                                                    <td>{{ $article->aadhar_no }}</td>
+                                                    <td><strong>Nationality</strong></td>
+                                                    <td>{{ $article->nationality }}</td>
+                                                    <td><strong>Alternate Phone Number</strong></td>
+                                                    <td>{{ $article->mobile }}</td>
+                                                    
+                                                </tr>
+
+
+
+                                                
+
+                                                <tr>
+                                                    <td colspan="6" class="bg-light"><strong>Permanent Address</strong>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Flat No. / House No.</td>
+                                                    <td>{{$article->permanent_flat_no}}</td>
+                                                    <td><b>Complete Address</td>
+                                                    <td>{{ $article->permanent_address }}</td>
+                                                    <td><b>District</b></td>
+                                                    <td>{{ districtName($article->permanent_district) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Pincode</b></td>
+                                                    <td>{{ $article->permanent_pincode }}</td>
+                                                    <td><b>State<br>राज्य</b></td>
+                                                    <td>Uttar Pradesh</td>
+                                                </tr>
+
+                                                <td colspan="6"><strong>Correspondence Address</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Flat No. / House No.</td>
+                                                    <td>{{$article->present_flat_no}}</td>
+                                                    <td><b>Complete Address</td>
+                                                    <td>{{ $article->present_address }}</td>
+                                                    <td><b>District</b></td>
+                                                    <td>{{ districtName($article->present_district) }}</td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Pincode</b></td>
+                                                    <td>{{ $article->present_pincode }}</td>
+                                                    <td><strong>State</strong></td>
+                                                    <td>{{ stateName($article->present_state) }}</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="6" class="bg-light"><strong>Educational
+                                                            Qualification</strong></td>
+                                                </tr>
+                                                            
+                                                           
+                                                <tr>
+                                                    <td colspan="6">
+                                                        <table class="table table-bordered table-sm">
+                                                            <thead>
+                                                                <tr style="background-color: #dfdacd;">
+                                                                    <th style="width:5%">S.No.</th>
+                                                                    <th>Class</th>
+                                                                    <th style="width:10%">Upload</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>1</td>
+                                                                    <td>High School Certificate</td>
+                                                                    <td><a href="{{ asset('/public/eklavya_krida_kosh/high_school_certificate/') }}/{{ $article->high_school_certificate }}"
+                                                                            target="_blank"
+                                                                            class="btn btn-success btn-xs">Uploaded</a></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>2</td>
+                                                                    <td>Domicile Certificate of UP</td>
+                                                                    <td><a href="{{ asset('/public/eklavya_krida_kosh/domicile_certificate/') }}/{{ $article->domicile_certificate }}"
+                                                                            target="_blank"
+                                                                            class="btn btn-success btn-xs">Uploaded</a></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>3</td>
+                                                                    <td>Highest Education Qualification</td>
+                                                                    <td><a href="{{ asset('/public/eklavya_krida_kosh/highest_qualification_certificate/') }}/{{ $article->highest_qualification_certificate }}"
+                                                                            target="_blank"
+                                                                            class="btn btn-success btn-xs">Uploaded</a></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="6" class="bg-light"><strong>Awards &
+                                                            Achievements</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="6">
+                                                        <table class="table table-bordered table-sm awardtable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <td rowspan="2"><label>Sports Competition Name
+                                                                            <br>खेलकूद प्रतियोगिता का नाम</label> <span
+                                                                            class="text-danger">*</span>
+                                                                    </td>
+                                                                    <td rowspan="2"><label>Sport Name<br>खेल का
+                                                                            नाम</label> <span class="text-danger">*</span>
+                                                                    </td>
+                                                                    <td rowspan="2"><label>Position / Medal<br>पद का नाम
+                                                                            / पदक</label> <span class="text-danger">*</span>
+                                                                    </td>
+                                                                    <td colspan="2" class="text-center"><label>Period of
+                                                                            Competition<br>प्रतियोगिता की अवधि</label> <span
+                                                                            class="text-danger">*</span>
+                                                                    </td>
+                                                                    <td rowspan="2"><label>Venue Name</br>स्थल का
+                                                                            नाम</label> <span class="text-danger">*</span<
+                                                                                /td>
+                                                                    <td rowspan="2"><label>Upload Relevant
+                                                                            Certificate<br>प्रासंगिक प्रमाण पत्र अपलोड
+                                                                            करें<span class="text-danger">*</span>
+                                                                        </label>
+                                                                    </td>
+                                                                    <td rowspan="2"><label>Sport Event Detail</br>खेलकूद
+                                                                            प्रतियोगिता का विवरण<span
+                                                                                class="text-danger">*</span></label> </td>
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label>From </label>
+                                                                    </td>
+                                                                    <td><label>To </label>
+                                                                    </td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                                @foreach ($sport_achievement as $item)
+                                                                    <tr>
+                                                                        <td class="form-group">
+                                                                            {{ sportEventName($item->sport_achievement) }}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ sport_name($item->sport_name) }}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $item->sport_event }}
+                                                                        </td>
+                                                                        <!--  -->
+                                                                        <td>
+                                                                            {{ $item->competition_from_date }}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $item->competition_to_date }}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $item->sport_place }}
+                                                                        </td>
+                                                                        <td style="text-align:center">
+                                                                            @if ($item->sport_achievement_docs != '')
+                                                                                <a href="{{ url('storage/app/public/eklavya_kreeda_kosh', $item->sport_achievement_docs) }}"
+                                                                                    target="_blank">
+                                                                                    <!-- <span class="btn btn-success btn-xs"> Uploaded</span> -->
+                                                                                    <i class="fa fa-download"></i>
+                                                                                </a>
+                                                                            @else
+                                                                                <strong class="btn btn-danger btn-xs">Not
+                                                                                    Uploaded</strong>
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $item->event_details }}
+                                                                        </td>
+                                                                        <!--  -->
+                                                                    </tr>
+                                                                @endforeach
+
+                                                            </tbody>
+                                                        </table>
+
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                                <td colspan="6" class="bg-light">
+                                                                    <strong>Bank Details/बैंक खाते का विवरण</strong>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                    <td colspan="6">
+                                                        <table class="table table-bordered table-sm">
+                                                            <thead>
+                                                                <tr style="background-color: #dfdacd;">
+                                                                    <th style="width:25%">Bank Name</th>
+                                                                    <th style="width:25%">IFSC Code</th>
+                                                                    <th style="width:25%">Bank Account Number</th>
+                                                                    <th style="width:25%">Front page of Passbook</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>{{ $article->bank_name }}</td>
+                                                                    <td>{{ $article->ifsc_code }}</td>
+                                                                    <td>{{ $article->account_no }}</td>
+                                                                    <td><a href="{{ asset('/public/eklavya_krida_kosh/front_page_of_passbook/') }}/{{ $article->front_page_of_passbook }}"
+                                                                            target="_blank" " class="btn btn-success btn-xs">Uploaded</a></td>
+                                                                </tr>
+
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                            
+                                                            <tr>
+                                                                <td colspan="6" class="bg-light">
+                                                                    <strong>Declaration/घोषणा</strong>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="center">
+                                                                    <input {{  ($article->final_submit == 1 ? 'disabled' : '') }} {{  ($article->final_submit == 1 ? 'checked' : '') }} type="checkbox" id="checkbox" />
+                                                                    &nbsp; <b>I Agree</b>
+                                                                </td>
+                                                                <td colspan="5">I hereby certify that all the above facts are true and correct to the best of my knowledge. If any particulars given by me are found to be incorrect, I shall be held liable to refund the entire amount of Financial Assistance which has been/will be sanctioned to me on the basis of incorrect facts.<br>मैं एतद्द्वारा घोषणा करता/करती हूं कि मैंने आवेदन से संबंधित सभी नियम और शर्तें, पात्रता मानदंड और अन्य प्रासंगिक जानकारी पढ़ ली हैं एवं उनका पालन करता/करती हूं। मैं यह भी घोषणा करता/करती हूं कि उपरोक्त सभी विवरण मेरे अनुसार सत्य व सही हैं। यदि मेरा कोई भी तथ्य गलत अथवा असत्य पाया जाता है, तो मेरा आवेदन अस्वीकृत किया जा सकता है और इसके लिए पूर्णतः मैं स्वयं उत्तरदायी ठहराया जाऊंगा/जाऊंगी।
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="3" align="center">
+                                                                    <span>Date/तिथि</span><br>
+                                                                    <b>{{ dmy($article->created_at) }}</b>
+                                                                </td>
+                                                                <td colspan="3" align="center">
+                                                                    <img src="{{URL::asset('storage/app/public/award/').'/'.$article->signature_doc}}" class="img-fluid" style="width: 140px; height: 50px;"><br>
+                                                                    <b>Signature/हस्ताक्षर</b>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <?php
+                                                                if ($article->form_status == 1 || $article->form_status == 2 || $query_s != 0) { ?>
+                                                                    @if($article->form_status == 1)
+                                                                    <td colspan="6" align="center">
+                                                                        <b>Form Status :-</b> <span class="btn btn-success disabled btn-sm ml-5">Accepted</span>
+                                                                    </td>
+                                                                    @elseif($article->form_status == 2)
+                                                                    <td colspan="6" align="center">
+                                                                        <b>Form Status :-</b> <span class="btn btn-danger btn-sm ml-5">Rejected</span>
+                                                                    </td>
+                                                                    @else
+                                                                    <td colspan="3" class="noprint" align="center">
+                                                                        <b>Form Status :-</b> <span class="btn btn-danger btn-sm ml-5">Pending</span>
+                                                                    </td>
+                                                                    <td colspan="3" class="noprint" align="center">
+                                                                        <b>Action:- </b> &nbsp;
+                                                                        @if(Auth::guard('admin')->user()->admin_role == 1)
+                                                                            <a href="#" class="btn btn-info btn-sm @if($query_s ==1) disabled @endif" data-bs-toggle="modal" data-bs-target="#query_form_marked">Mark Query</a>
+                                                                        @endif
+                                                                        @if(Auth::guard('admin')->user()->admin_role == 1)
+                                                                        <?php $da="disabled";
+																			if(isset($article->is_forwarded_by_rso) && $article->is_forwarded_by_rso == 1){
+																				$da="";
+																			}?>
+                                                                        <a href="#" class="btn btn-success disabled btn-sm {{$da}}" data-bs-toggle="modal" data-bs-target="#Subapp">Accept</a>
+                                                                        <a href="#" class="btn btn-danger disabled btn-sm {{$da}}" data-bs-toggle="modal" data-bs-target="#Rejectapp">Reject</a>
+                                                                        @endif
+                                                                    </td>
+                                                                    @endif
+                                                                <?php } else { ?>
+                                                                    <td colspan="3" class="noprint" align="center">
+                                                                        <b>Form Status :-</b> <span class="btn btn-danger btn-sm ml-5">Pending</span>
+                                                                    </td>
+                                                                    <td colspan="3" class="noprint" align="center">
+                                                                        <b>Action:- </b> &nbsp;
+                                                                        @if(Auth::guard('admin')->user()->admin_role == 1)
+                                                                            <a href="#" class="btn btn-info btn-sm @if($query_s ==1) disabled @endif" data-bs-toggle="modal" data-bs-target="#query_form_marked">Mark Query</a>
+                                                                        @endif
+                                                                        @if(Auth::guard('admin')->user()->admin_role == 1)
+                                                                        <?php $da="disabled";
+																			if(isset($article->is_forwarded_by_rso) && $article->is_forwarded_by_rso == 1){
+																				$da="";
+																			}?>
+                                                                        <a href="#" class="btn btn-success btn-sm {{$da}}" data-bs-toggle="modal" data-bs-target="#Subapp">Accept</a>
+                                                                        <a href="#" class="btn btn-danger btn-sm {{$da}}" data-bs-toggle="modal" data-bs-target="#Rejectapp">Reject</a>
+                                                                        @endif
+                                                                    </td>
+                                                                <?php } ?>
+                                                            </tr>
+                                                            
+                                                        </table>
+                                                        <div class="accordion" id="accordionChat">
+                                                            <div class="accordion-item">
+                                                                <?php
+                                                                $check_name = 0;
+                                                                $class = "out";
+                                                                ?>
+                                                                @foreach($comment_data as $key=>$item)
+                                                                @if($key==0)
+                                                                <h2 class="accordion-header" id="headingOne">
+                                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                                        <div class="subj">
+                                                                            <h6 class="text-uppercase fw-bold mb-1">
+                                                                                Supporting Document By Association
+                                                                            </h6>
+                                                                        </div>
+                                                                    </button>
+                                                                </h2>
+                                                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionChat">
+                                                                    <div class="accordion-body">
+                                                                        @endif
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <ul class="chat-list">
+
+                                                                                    @if( !empty($item->comments))
+                                                                                    <?php
+                                                                                    if ($item->sender_id != $check_name && $class == "in")
+                                                                                        $class = "out";
+                                                                                    elseif ($item->sender_id == $check_name && $class == "in")
+                                                                                        $class = "in";
+                                                                                    elseif ($item->sender_id == $check_name && $class == "out")
+                                                                                        $class = "out";
+                                                                                    else
+                                                                                        $class = "in";
+                                                                                    ?>
+
+                                                                                    <li class={{$class}}>
+
+                                                                                        <div class="chat-img">
+                                                                                            <img alt="Avtar" src="{{URL::asset('storage/app/public/direct_recruitment/profile.jpg')}}">
+                                                                                        </div>
+                                                                                        @php $check_name=$item->sender_id; @endphp
+                                                                                        <div class="chat-body">
+                                                                                            <div class="chat-message">
+                                                                                                <h5 class="name">{{rsoName($item->sender_id)}} @if(!empty($item->doc))<a class="doc_download" href="{{url('public/verification_document', $item->doc)}}" download target="_blank"><i class="fa fa-download attachfile"></i></a>@endif</h5>
+                                                                                                <p class="comment">{{$item->comments}}</p>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <small class="text-muted"><b>Reply On: {{dmyHi($item->created_at)}}</b></small>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                    <!-- <li class="out">
+                                                                        <div class="chat-img">
+                                                                            <img alt="Avtar" src="{{URL::asset('storage/app/public/direct_recruitment/').'/'.$article->photograph_doc}}">
+                                                                        </div>
+                                                                        <div class="chat-body">
+                                                                            <div class="chat-message">
+                                                                                <h5><a  href="{{url('public/verification_document', $item->doc)}}" download target="_blank"><i class="fa fa-download attachfile"></i></a> {{rsoName($item->sender_id)}}</h5>
+                                                                                <p>{{$item->comments}}</p>
+                                                                            </div>
+                                                                            <div>
+                                                                                <small class="text-muted"><b>Reply On: 19 February, 2023 16:39 PM</b></small>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li> -->
+                                                                                    @else
+                                                                                    <div class="text-danger"> Not Uploaded</div>
+                                                                                    @endif
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="separator-dashed"></div>
+                                                                        @endforeach
+                                                                        <?php 
+                                                                            $sss=0;
+                                                                            if(Auth::guard('admin')->user()->admin_role==3 && $article->is_forwarded_by_association >= 1){
+                                                                                $sss=1;
+                                                                            }
+                                                                            $tt=get_last_reply($article->application_no);
+                                                                        ?>
+                                                                        {{-- @if(isset($article->form_status) && $article->form_status == 0 )
+                                                                        @if($tt && (Auth::guard('admin')->user()->id != $tt->sender_id) && $sss==0)
+                                                                        @if($tt->type != 2)
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-md-12 text-end">
+                                                                                <a class="btn btn-primary btn-xs rplbtn reply" onclick="set_reply_data({{$tt->sender_id}},{{$tt->reciever_id}})" data-bs-toggle="modal" data-bs-target="#query_form_admin""><span class=" fa fa-reply fa-1x"></span> Reply </a>
+                                                                            </div>
+                                                                        </div>
+                                                                        @else
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-md-12 text-end">
+                                                                                <a class="btn btn-primary btn-xs rplbtn reply" onclick="set_reply_data({{$tt->sender_id}},{{$tt->reciever_id}})" data-bs-toggle="modal" data-bs-target="#reply_of_query"><span class="fa fa-reply fa-1x"></span> Reply </a>
+                                                                            </div>
+                                                                        </div>
+                                                                        @endif
+                                                                        @endif
+                                                                        @endif --}}
+                                                                        @endforeach
+                                                                        {{-- @if(Auth::guard('admin')->user()->admin_role != 1 && Auth::guard('admin')->user()->admin_role != 4)
+                                                                @if($article->form_status == 1 || $article->form_status == 2) --}}
+                                                                        @if(count($queryData) > 0)
+                                                                        <x-query-details :queryData="$queryData" />
+                                                                        @endif
+                                                                        {{-- @else
+                                                                <x-query-details :queryData="$queryData" />
+                                                                @endif
+                                                                @endif --}}
+                                                                        {{-- <x-query-details :queryData="$queryData" /> --}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+
+<x-marked-query :id="$id" :type="7" />
+
+<!--For Reject Application-->
+<div class="modal fade" id="Rejectapp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Reject Application</h5>
+                <!--<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+            </div>
+            <form action="{{route('financial_is_rejected')}}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <h3 class="text-center">Are you sure to Reject the Application? Action once taken cannot be reverted.</h3>
+                    <input type="hidden" name="user_id" @if(isset($articles[0]->application_no) )value="{{$articles[0]->application_no}}" @endif>
+                    <input type="hidden" name="form_type" value="7">
+                    <div class="form-group">
+                        <label class="placeholder">Remark</label>
+                        <textarea required name="remark" rows="3" class="form-control" cols="40"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn btn-outline-danger"><span class="icons icon-cloud-download"></span> Download</button>-->
+                    <button type="submit" class="btn btn-info">Yes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--For Submit Application-->
+<div class="modal fade" id="Subapp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Accept Application</h5>
+                <!--<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+            </div>
+            <form action="{{route('financial_is_accepted')}}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <h3 class="text-center">Are you sure to Accept the Application? Action once taken cannot be reverted.</h3>
+                    <input type="hidden" name="user_id" @if(isset($articles[0]->application_no) )value="{{$articles[0]->application_no}}" @endif>
+                    <input type="hidden" name="form_type" value="7">
+                    <div class="form-group">
+                        <label class="placeholder">Remark</label>
+                        <textarea name="remark" rows="3" class="form-control" cols="40"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn btn-outline-danger"><span class="icons icon-cloud-download"></span> Download</button>-->
+                    <button type="submit" class="btn btn-info">Yes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Query Document By Adminstrator-->
+<div class="modal fade" id="query_form_admin" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Query For Supporting Document</h5>
+                <!--<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+            </div>
+            <form action="{{route('save_query_for_supporting_document')}}" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    @csrf
+                    <input type="hidden" name="user_id" @if(isset($articles[0]->application_no) )value="{{$articles[0]->application_no}}" @endif />
+                    <input type="hidden" name="form_type" value="7">
+                    <input type="hidden" class="sender_id" name="sender_id" value="">
+                    <input type="hidden"  class="reciever_id" name="reciever_id" value="">
+
+                    <label class="placeholder">Remark <span class="text-danger">*</span></label>
+                    <textarea class="form-control" required name="remark" id="is_mark_query" cols="95" rows="2"></textarea>
+
+                    <label>Query Document <span class="text-danger remove_danger">*</span></label>
+                    <div class="input-group">
+                        <input type="file" required name="query_doc_by_admin" class="form-control remove_danger" onchange="getfileext(this.value,10)" id="File10" aria-describedby="inputGroupFileAddon05" aria-label="Upload">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div>
+                        <input type="submit" class="btn btn-info" value="Send">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Query reply  By Association-->
+<div class="modal fade" id="reply_of_query" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Reply of Query</h5>
+                <!--<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+            </div>
+            <form action="{{route('query_reply_for_supporting_document')}}" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    @csrf
+                    <input type="hidden" name="user_id" @if(isset($articles[0]->application_no)) value="{{$articles[0]->application_no}}" @endif />
+                    <input type="hidden" name="form_type" value="7">
+                    <input type="hidden" class="sender_id" name="sender_id" value="">
+                    <input type="hidden"  class="reciever_id" name="reciever_id" value="">
+
+                    <label class="placeholder">Remark <span class="text-danger">*</span></label>
+                    <textarea class="form-control" required name="remark" id="is_mark_query" cols="95" rows="2"></textarea>
+
+                    <label>Query Document <span class="text-danger remove_danger">*</span></label>
+                    <div class="input-group">
+                        <input type="file" required name="forward_verification_document" class="form-control remove_danger" onchange="getfileext(this.value,10)" id="File10" aria-describedby="inputGroupFileAddon05" aria-label="Upload">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div>
+                        <input type="submit" class="btn btn-info" value="Send">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
