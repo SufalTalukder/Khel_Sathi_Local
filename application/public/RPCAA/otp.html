@@ -1,0 +1,183 @@
+﻿<!doctype html>
+<html>
+<head>
+    <title>Department of Sports</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="../images/favicon.png" />
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <link href="css/all.css" rel="stylesheet" />
+    <link href="css/datepicker.css" rel="stylesheet" media="all" />
+    <link href="css/custom_theme.css" rel="stylesheet" />
+    <link href="css/responsive.css" rel="stylesheet" />
+    <link href="css/default.css" rel="stylesheet" />
+    <link href="css/login.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-fluid">
+        <a href="#" title="Instruction" class="help">
+            <span class="item">
+                <img src="images/instruction.png" />
+            </span>
+            <div class="circle" style="animation-delay: 0s"></div>
+            <div class="circle" style="animation-delay: 1s"></div>
+            <div class="circle" style="animation-delay: 2s"></div>
+            <div class="circle" style="animation-delay: 3s"></div>
+        </a>
+        <div class="row">
+            <div class="col-md-6 loginsidebar">
+                <div class="row justify-content-center">
+                    <div class="col-4 col-lg-2 text-center mb-3"> <img src="images/logo.png" class="img-fluid"> </div>
+                    <div class="col-md-12 col-12 deptname">
+                        <h3 class="hd-org">Khel Sathi Portal/खेल साथी पोर्टल</h3>
+                        <h5>
+                            Department of Sports, Government of Uttar Pradesh<br>
+                            खेल विभाग, उत्तर प्रदेश सरकार
+                        </h5>
+                    </div>
+                    <div class="col-md-12 col-12 deptname">
+                        <h2 class="text-danger">
+                            Registration of Private Coaching Academies/Associations<br />निजी कोचिंग अकादमियों/एसोसिएशनों का पंजीकरण
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 bg-light1">
+                <div class="p-4 p-lg-5 login-form">
+                    <div class="text-center text-md-center mb-4 mt-md-0">
+                        <h3 class="mb-0">OTP Verification/ओटीपी सत्यापन</h3>
+                        <div class="d-flex justify-content-center align-items-center mt-2">
+                            <span class="fw-normal">
+                                Enter and verify the OTP sent on the Mobile No./Email ID<br>
+                                आपके मोबाइल नंबर और ईमेल आईडी पर भेजे गए ओटीपी को भरकर सत्यापित करें
+                            </span>
+                        </div>
+                    </div>
+                    <form action="#" class="mt-4">
+                        <div class="form-group mb-3">
+                            <label for="password-field">Enter OTP/ओटीपी भरें</label>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group">
+                                        <input type="text" aria-label="First name" class="form-control" maxlength="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                        <input type="text" aria-label="Last name" class="form-control" maxlength="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                        <input type="text" aria-label="Last name" class="form-control" maxlength="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                    </div>
+                                </div>
+                                <div class="col-1 otp-dash">-</div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <input type="text" aria-label="First name" class="form-control" maxlength="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                        <input type="text" aria-label="Last name" class="form-control" maxlength="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                        <input type="text" aria-label="Last name" class="form-control" maxlength="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="d-flex justify-content-center align-items-center mt-2 text-center mb-3">
+                            <span class="fw-normal text-black-50">
+                                <span class="otp-time">Resend OTP/पुनः भेजें <span id="countdown"></span> Seconds</span><br>
+                                <a href="#" class="fw-bold">Resend</a>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="text-center mb-3">
+                            <a href="#" class="btn btn-outline-success " data-bs-toggle="modal" data-bs-target="#verify">Verify/सत्यापित करें</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="row">
+            <div class="col-md-8">
+                <ul class="foot-list">
+                    <li>Copyright © Department of Sports, Government of Uttar Pradesh / खेल विभाग, उत्तर प्रदेश सरकार</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul class="foot-list float-end">
+                    <li>
+                        Powered by <a href="http://otpl.co.in/" target="_blank">OmniNet</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Instructions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list">
+                        <li>Step 1: Enter your Company ID, User ID & Password. </li>
+                        <li>Step 2: Set up your Security Questions. </li>
+                        <li>Step 3: One Time Passcode Setup. </li>
+                        <li>Step 4: User Password Change. </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-outline-danger"><span class="icons icon-cloud-download"></span>Download</button>
+                    <button type="button" class="btn btn-outline-success " data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="verify" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <p>
+                        <img src="images/sent.png" alt="Sent" title="Sent">
+                    </p>
+                    <div class="clearfix"></div>
+                    <h5>Your Registration is completed and Password has been sent on your registered Mobile No. & Email ID. Kindly Login to proceed.</h5>
+                    <h5>आपका पंजीकरण पूरा हो गया है और पासवर्ड आपके पंजीकृत मोबाइल नंबर और ईमेल आईडी पर भेज दिया गया है। आगे बढ़ने के लिए कृपया लॉगिन करें।</h5>
+                </div>
+                <div class="modal-footer justify-content-md-center">
+                    <div class="col-4 d-grid">
+                        <a class="btn btn-outline-success " href="login.html">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script>
+        $(".toggle-password").click(function () {
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input = $($(this).attr("toggle"));
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+        $(document).ready(function () {
+            $("#verify").modal({
+                show: false,
+                backdrop: 'static'
+            });
+        });
+        var timeleft = 20;
+        var downloadTimer = setInterval(function () {
+            if (timeleft <= 0) {
+                clearInterval(downloadTimer);
+                document.getElementById("countdown").innerHTML = "Finished";
+            } else {
+                document.getElementById("countdown").innerHTML = timeleft + "";
+            }
+            timeleft -= 1;
+        }, 1000);
+    </script>
+</body>
+</html>
+

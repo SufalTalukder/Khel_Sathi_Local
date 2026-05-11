@@ -5,7 +5,10 @@
 
 /application/vendor/
 /application/node_modules/
-/application/public/
+/application/public/eklavya_krida_kosh/
+/application/public/onlineAdmission_storage/images/
+/application/public/facility_booking_storage/
+/application/public/hostelapplicant/
 /application/storage/*.key
 /application/storage/logs/
 /application/storage/framework/cache/

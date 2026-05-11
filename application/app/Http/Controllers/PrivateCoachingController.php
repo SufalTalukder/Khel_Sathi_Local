@@ -59,7 +59,7 @@ class PrivateCoachingController extends Controller
         }
 
         if (DB::table('private_coaching_register')->where('aadhar_no', $request->aadhar_no)->where('otp_verify', 1)->exists())
-                return response()->json(['error' => true, 'msg' => "Entered Aadhar No is already registered on the portal./भरा गया आधार संख्या पोर्टल पर पहले से पंजीकृत है।   ", "url" => route('signUp')]);
+            return response()->json(['error' => true, 'msg' => "Entered Aadhar No is already registered on the portal./भरा गया आधार संख्या पोर्टल पर पहले से पंजीकृत है।   ", "url" => route('signUp')]);
 
         // $otp = 123456;
         $otp = rand(111111, 999999);
@@ -70,7 +70,7 @@ class PrivateCoachingController extends Controller
             'email' => $request->email,
             'mobile' => $request->mobile,
             'designation' => $request->designation,
-            'aadhar_no'=>$request->aadhar_no,
+            'aadhar_no' => $request->aadhar_no,
             'decoded_password' => $randomPassword,
             'password' => Hash::make($randomPassword),
 
@@ -533,9 +533,9 @@ class PrivateCoachingController extends Controller
 
         $profile = DB::table('private_coaching_profile')->where('user_id', Auth::guard('PrivateCoaching')->user()->id)->first();
         $associate_member =  DB::table('private_coaching_associate_member')->where('application_id', $application->id)->get();
-        $query_mark =  DB::table('private_mark_query_comment')->where('type',2)->where('application_no', $application->application_no)->get();
+        $query_mark =  DB::table('private_mark_query_comment')->where('type', 2)->where('application_no', $application->application_no)->get();
 
-        return view('private_coaching.application_preview', compact('application', 'associate_member', 'profile','query_mark'));
+        return view('private_coaching.application_preview', compact('application', 'associate_member', 'profile', 'query_mark'));
     }
 
 
@@ -616,28 +616,28 @@ class PrivateCoachingController extends Controller
 
         $adminRole = Auth::guard('admin')->user()->admin_role;
         $application =   DB::table('private_coaching_register')
-        ->leftJoin('private_coaching_application', 'private_coaching_application.user_id', '=', 'private_coaching_register.id')
-        ->leftJoin('private_coaching_profile', 'private_coaching_profile.user_id', '=', 'private_coaching_register.id')->select('private_coaching_application.id as id_application', 'private_coaching_register.*', 'private_coaching_profile.*', 'private_coaching_application.application_no', 'private_coaching_application.*');
-          
-        // if(isset($adminRole) &&  $adminRole == 3) 
+            ->leftJoin('private_coaching_application', 'private_coaching_application.user_id', '=', 'private_coaching_register.id')
+            ->leftJoin('private_coaching_profile', 'private_coaching_profile.user_id', '=', 'private_coaching_register.id')->select('private_coaching_application.id as id_application', 'private_coaching_register.*', 'private_coaching_profile.*', 'private_coaching_application.application_no', 'private_coaching_application.*');
+
+        // if(isset($adminRole) &&  $adminRole == 3)
         // $application->where('sport_id', '=', Auth::guard('admin')->user()->sport_type);
 
-         if (isset($adminRole) &&  $adminRole == 2) {
+        if (isset($adminRole) &&  $adminRole == 2) {
             $div_id = Auth::guard('admin')->user()->division_id;
             $dis_t = DB::table('hostel_div_district_mapping')->where('division_id', $div_id)->pluck('district_id')
-            ->toArray();
-            
+                ->toArray();
+
             // $application->where('is_forwarded', '>=', 1);
             $application->whereIn('district', $dis_t);
-        }elseif(isset($adminRole) &&  $adminRole == 9){
+        } elseif (isset($adminRole) &&  $adminRole == 9) {
             // $application->where('is_forwarded', '>=', 1);
             $application->where('district', Auth::guard('admin')->user()->district_id);
         }
         // elseif(isset($adminRole) &&  $adminRole == 17){
         //     $application->where('is_forwarded', '>=', 2);
         // }
-        
-        $application=$application->where('private_coaching_application.final_submit', 1)->orderByDesc('private_coaching_application.final_submit_on')->get();
+
+        $application = $application->where('private_coaching_application.final_submit', 1)->orderByDesc('private_coaching_application.final_submit_on')->get();
         return view('private_coaching.admin_dashboard', compact('application'));
     }
 
@@ -648,49 +648,48 @@ class PrivateCoachingController extends Controller
         $adminRole = Auth::guard('admin')->user()->admin_role;
         $application =   DB::table('private_coaching_register')->leftJoin('private_coaching_application', 'private_coaching_application.user_id', '=', 'private_coaching_register.id')->leftJoin('private_coaching_profile', 'private_coaching_profile.user_id', '=', 'private_coaching_register.id')->select('private_coaching_application.id as id_application', 'private_coaching_register.*', 'private_coaching_profile.*', 'private_coaching_application.*')->where('private_coaching_application.id', $id)->first();
         $associate_member =  DB::table('private_coaching_associate_member')->where('application_id', $id)->get();
-        $query_mark =  DB::table('private_mark_query_comment')->where('type',2)->where('application_no', $application->application_no);
-        $forward_data =  DB::table('private_mark_query_comment')->where('type',1)->where('application_no', $application->application_no);
-        if($adminRole == 2 || $adminRole == 3 || $adminRole == 9){
-            $forward_data->where('role_id',$adminRole);
-            $query_mark->where('role_id',$adminRole);
+        $query_mark =  DB::table('private_mark_query_comment')->where('type', 2)->where('application_no', $application->application_no);
+        $forward_data =  DB::table('private_mark_query_comment')->where('type', 1)->where('application_no', $application->application_no);
+        if ($adminRole == 2 || $adminRole == 3 || $adminRole == 9) {
+            $forward_data->where('role_id', $adminRole);
+            $query_mark->where('role_id', $adminRole);
         }
-        $forward_data=$forward_data->get();
+        $forward_data = $forward_data->get();
         $query_mark = $query_mark->get();
 
         // dd($query_mark);
-        return view('private_coaching.admin_application_preview', compact('application', 'associate_member','query_mark','forward_data'));
+        return view('private_coaching.admin_application_preview', compact('application', 'associate_member', 'query_mark', 'forward_data'));
     }
 
     public function accepted_reject_status(Request $req)
     {
 
         if ($req->status == 1) {
-            $data=[
+            $data = [
                 'status' => 1,
                 'accept_reject_date' => date('Y-m-d'),
                 'remark' => $req->remark
             ];
-            $msg="Application Accepted Successfully";
-           
-        }else{
-            $data=[
+            $msg = "Application Accepted Successfully";
+        } else {
+            $data = [
                 'status' => 2,
                 'accept_reject_date' => date('Y-m-d'),
                 'remark' => $req->remark
             ];
-            $msg="Application Rejected Successfully";
+            $msg = "Application Rejected Successfully";
         }
 
-        if($req->value == 1){
+        if ($req->value == 1) {
             DB::table('private_coaching_application')->where('id', $req->application_id)->update($data);
-        }elseif($req->value == 2){
+        } elseif ($req->value == 2) {
             DB::table('private_gym_application')->where('id', $req->application_id)->update($data);
-        }elseif($req->value == 3){
+        } elseif ($req->value == 3) {
             DB::table('private_academies_application')->where('id', $req->application_id)->update($data);
-        }elseif($req->value == 4){
+        } elseif ($req->value == 4) {
             DB::table('private_swimming_pool_application')->where('id', $req->application_id)->update($data);
         }
-         return response()->json(['error' => false, 'msg' => $msg]);
+        return response()->json(['error' => false, 'msg' => $msg]);
     }
     public function profile_preview()
     {
@@ -1027,12 +1026,12 @@ class PrivateCoachingController extends Controller
         // If you have related data like trainers or staff stored in other tables:
         $trainers = DB::table('private_sub_member_detail')->where('type', 1)->where('application_id', $id)->get();
         $staff = DB::table('private_sub_member_detail')->where('type', 2)->where('application_id', $id)->get();
-        $query_mark =  DB::table('private_mark_query_comment')->where('type',2)->where('application_no', $application->application_no)->get();
+        $query_mark =  DB::table('private_mark_query_comment')->where('type', 2)->where('application_no', $application->application_no)->get();
         return view('private_coaching.academies_application_preview', [
             'application' => $application,
             'trainers' => $trainers,
             'staffs' => $staff,
-            'query_mark' =>$query_mark
+            'query_mark' => $query_mark
         ]);
     }
 
@@ -1061,7 +1060,6 @@ class PrivateCoachingController extends Controller
 
             return response()->json(['error' => false, 'msg' => 'Application Form Final Submitted Successfully.',  "url" => route('academies_application_preview', $id)]);
         }
-
     }
 
 
@@ -1332,7 +1330,7 @@ class PrivateCoachingController extends Controller
         $application = DB::table('private_swimming_pool_application')->where('id', $id)->first();
         $instructors = DB::table('private_sub_member_detail')->where('type', 3)->where('application_id', $id)->get();
         $lifeguards = DB::table('private_sub_member_detail')->where('type', 4)->where('application_id', $id)->get();
-        $query_mark =  DB::table('private_mark_query_comment')->where('type',2)->where('application_no', $application->application_no)->get();
+        $query_mark =  DB::table('private_mark_query_comment')->where('type', 2)->where('application_no', $application->application_no)->get();
 
         return view('private_coaching.swimming_pool_application_preview', [
             'application' => $application,
@@ -1581,7 +1579,7 @@ class PrivateCoachingController extends Controller
     {
         $application = DB::table('private_gym_application')->where('id', $id)->first();
         $trainers = DB::table('private_sub_member_detail')->where('type', 5)->where('application_id', $id)->get();
-        $query_mark =  DB::table('private_mark_query_comment')->where('type',2)->where('application_no', $application->application_no)->get();
+        $query_mark =  DB::table('private_mark_query_comment')->where('type', 2)->where('application_no', $application->application_no)->get();
 
         return view('private_coaching.gyms_application_preview', [
             'application' => $application,
@@ -1679,33 +1677,33 @@ class PrivateCoachingController extends Controller
     {
         $adminRole = Auth::guard('admin')->user()->admin_role;
         $application =   DB::table('private_coaching_register')
-        ->leftJoin('private_gym_application', 'private_gym_application.user_id', '=', 'private_coaching_register.id')
-        ->leftJoin('private_coaching_profile', 'private_coaching_profile.user_id', '=', 'private_coaching_register.id')
-        ->select('private_gym_application.id as id_application', 'private_coaching_register.*', 'private_coaching_profile.*', 'private_gym_application.application_no', 'private_gym_application.*')
-        ->where('private_gym_application.final_submit', 1);
+            ->leftJoin('private_gym_application', 'private_gym_application.user_id', '=', 'private_coaching_register.id')
+            ->leftJoin('private_coaching_profile', 'private_coaching_profile.user_id', '=', 'private_coaching_register.id')
+            ->select('private_gym_application.id as id_application', 'private_coaching_register.*', 'private_coaching_profile.*', 'private_gym_application.application_no', 'private_gym_application.*')
+            ->where('private_gym_application.final_submit', 1);
 
-        // if(isset($adminRole) &&  $adminRole == 3) 
+        // if(isset($adminRole) &&  $adminRole == 3)
         // $application->where('sport_id', '=', Auth::guard('admin')->user()->sport_type);
 
-         if (isset($adminRole) &&  $adminRole == 2) {
+        if (isset($adminRole) &&  $adminRole == 2) {
             $div_id = Auth::guard('admin')->user()->division_id;
             $dis_t = DB::table('hostel_div_district_mapping')->where('division_id', $div_id)->pluck('district_id')
-            ->toArray();
-            
+                ->toArray();
+
             // $application->where('is_forwarded', '>=', 1);
             $application->whereIn('district', $dis_t);
-        }elseif(isset($adminRole) &&  $adminRole == 9){
+        } elseif (isset($adminRole) &&  $adminRole == 9) {
             // $application->where('is_forwarded', '>=', 1);
             $application->where('district', Auth::guard('admin')->user()->district_id);
         }
         // elseif(isset($adminRole) &&  $adminRole == 17){
         //     $application->where('is_forwarded', '>=', 2);
         // }
-        
-        $application = $application->orderByDesc('private_gym_application.final_submit_on')
-        ->get();
 
-        
+        $application = $application->orderByDesc('private_gym_application.final_submit_on')
+            ->get();
+
+
         return view('private_coaching.admin.gym_list', compact('application'));
     }
 
@@ -1717,18 +1715,18 @@ class PrivateCoachingController extends Controller
         $trainers = DB::table('private_sub_member_detail')->where('type', 5)->where('application_id', $id)->get();
 
         $adminRole = Auth::guard('admin')->user()->admin_role;
-        $query_mark =  DB::table('private_mark_query_comment')->where('type',2)->where('application_no', $application->application_no);
-        $forward_data =  DB::table('private_mark_query_comment')->where('type',1)->where('application_no', $application->application_no);
-        if($adminRole == 2 || $adminRole == 3 || $adminRole == 9){
-            $forward_data->where('role_id',$adminRole);
-            $query_mark->where('role_id',$adminRole);
+        $query_mark =  DB::table('private_mark_query_comment')->where('type', 2)->where('application_no', $application->application_no);
+        $forward_data =  DB::table('private_mark_query_comment')->where('type', 1)->where('application_no', $application->application_no);
+        if ($adminRole == 2 || $adminRole == 3 || $adminRole == 9) {
+            $forward_data->where('role_id', $adminRole);
+            $query_mark->where('role_id', $adminRole);
         }
-        $forward_data=$forward_data->get();
+        $forward_data = $forward_data->get();
         $query_mark = $query_mark->get();
         return view('private_coaching.admin.gyms_application_preview', [
             'application' => $application,
             'trainers' => $trainers,
-            'query_mark'=> $query_mark,
+            'query_mark' => $query_mark,
             'forward_data' => $forward_data
 
         ]);
@@ -1737,33 +1735,33 @@ class PrivateCoachingController extends Controller
     {
         $adminRole = Auth::guard('admin')->user()->admin_role;
         $application =   DB::table('private_academies_application')
-        ->leftJoin('private_coaching_register', 'private_academies_application.user_id', '=', 'private_coaching_register.id')
-        ->leftJoin('private_coaching_profile', 'private_coaching_profile.user_id', '=', 'private_academies_application.user_id')
-        ->select('private_academies_application.id as id_application', 'private_coaching_register.*', 'private_coaching_profile.*', 'private_academies_application.application_no', 'private_academies_application.*')
-        ->where('private_academies_application.final_submit', 1);
+            ->leftJoin('private_coaching_register', 'private_academies_application.user_id', '=', 'private_coaching_register.id')
+            ->leftJoin('private_coaching_profile', 'private_coaching_profile.user_id', '=', 'private_academies_application.user_id')
+            ->select('private_academies_application.id as id_application', 'private_coaching_register.*', 'private_coaching_profile.*', 'private_academies_application.application_no', 'private_academies_application.*')
+            ->where('private_academies_application.final_submit', 1);
 
-        // if(isset($adminRole) &&  $adminRole == 3) 
+        // if(isset($adminRole) &&  $adminRole == 3)
         // $application->where('sport_id', '=', Auth::guard('admin')->user()->sport_type);
 
         if (isset($adminRole) &&  $adminRole == 2) {
             $div_id = Auth::guard('admin')->user()->division_id;
             $dis_t = DB::table('hostel_div_district_mapping')->where('division_id', $div_id)->pluck('district_id')
-            ->toArray();
-            
+                ->toArray();
+
             // $application->where('is_forwarded', '>=', 1);
             $application->whereIn('district', $dis_t);
-        }elseif(isset($adminRole) &&  $adminRole == 9){
+        } elseif (isset($adminRole) &&  $adminRole == 9) {
             // $application->where('is_forwarded', '>=', 1);
             $application->where('district', Auth::guard('admin')->user()->district_id);
         }
         // elseif(isset($adminRole) &&  $adminRole == 17){
         //     $application->where('is_forwarded', '>=', 2);
         // }
-        
-        $application = $application->orderByDesc('private_academies_application.final_submit_on')
-        ->get();
 
-       
+        $application = $application->orderByDesc('private_academies_application.final_submit_on')
+            ->get();
+
+
         return view('private_coaching.admin.academy_list', compact('application'));
     }
     public function admin_academy_preview($id)
@@ -1774,19 +1772,19 @@ class PrivateCoachingController extends Controller
         $trainers = DB::table('private_sub_member_detail')->where('type', 5)->where('application_id', $id)->get();
         $staff = DB::table('private_sub_member_detail')->where('type', 2)->where('application_id', $id)->get();
         $adminRole = Auth::guard('admin')->user()->admin_role;
-        $query_mark =  DB::table('private_mark_query_comment')->where('type',2)->where('application_no', $application->application_no);
-        $forward_data =  DB::table('private_mark_query_comment')->where('type',1)->where('application_no', $application->application_no);
-        if($adminRole == 2 || $adminRole == 3 || $adminRole == 9){
-            $forward_data->where('role_id',$adminRole);
-            $query_mark->where('role_id',$adminRole);
+        $query_mark =  DB::table('private_mark_query_comment')->where('type', 2)->where('application_no', $application->application_no);
+        $forward_data =  DB::table('private_mark_query_comment')->where('type', 1)->where('application_no', $application->application_no);
+        if ($adminRole == 2 || $adminRole == 3 || $adminRole == 9) {
+            $forward_data->where('role_id', $adminRole);
+            $query_mark->where('role_id', $adminRole);
         }
-        $forward_data=$forward_data->get();
+        $forward_data = $forward_data->get();
         $query_mark = $query_mark->get();
         return view('private_coaching.admin.academy_application_preview', [
             'application' => $application,
             'trainers' => $trainers,
             'staffs' => $staff,
-            'query_mark'=> $query_mark,
+            'query_mark' => $query_mark,
             'forward_data' => $forward_data
 
         ]);
@@ -1794,33 +1792,33 @@ class PrivateCoachingController extends Controller
 
     public function swimming_pool_list()
     {
-         $adminRole = Auth::guard('admin')->user()->admin_role;
+        $adminRole = Auth::guard('admin')->user()->admin_role;
         $application =   DB::table('private_swimming_pool_application')
-        ->leftJoin('private_coaching_register', 'private_swimming_pool_application.user_id', '=', 'private_coaching_register.id')
-        ->leftJoin('private_coaching_profile', 'private_coaching_profile.user_id', '=', 'private_swimming_pool_application.user_id')
-        ->select('private_swimming_pool_application.id as id_application', 'private_coaching_register.*', 'private_coaching_profile.*', 'private_swimming_pool_application.application_no', 'private_swimming_pool_application.*')
-        ->where('private_swimming_pool_application.final_submit', 1);
+            ->leftJoin('private_coaching_register', 'private_swimming_pool_application.user_id', '=', 'private_coaching_register.id')
+            ->leftJoin('private_coaching_profile', 'private_coaching_profile.user_id', '=', 'private_swimming_pool_application.user_id')
+            ->select('private_swimming_pool_application.id as id_application', 'private_coaching_register.*', 'private_coaching_profile.*', 'private_swimming_pool_application.application_no', 'private_swimming_pool_application.*')
+            ->where('private_swimming_pool_application.final_submit', 1);
 
-        // if(isset($adminRole) &&  $adminRole == 3) 
+        // if(isset($adminRole) &&  $adminRole == 3)
         // $application->where('sport_id', '=', Auth::guard('admin')->user()->sport_type);
 
         if (isset($adminRole) &&  $adminRole == 2) {
             $div_id = Auth::guard('admin')->user()->division_id;
             $dis_t = DB::table('hostel_div_district_mapping')->where('division_id', $div_id)->pluck('district_id')
-            ->toArray();
-            
+                ->toArray();
+
             // $application->where('is_forwarded', '>=', 1);
             $application->whereIn('district', $dis_t);
-        }elseif(isset($adminRole) &&  $adminRole == 9){
+        } elseif (isset($adminRole) &&  $adminRole == 9) {
             // $application->where('is_forwarded', '>=', 1);
             $application->where('district', Auth::guard('admin')->user()->district_id);
         }
         // elseif(isset($adminRole) &&  $adminRole == 17){
         //     $application->where('is_forwarded', '>=', 2);
         // }
-        
+
         $application = $application->orderByDesc('private_swimming_pool_application.final_submit_on')
-        ->get();
+            ->get();
         // dd($application);
         return view('private_coaching.admin.swimming_pool_list', compact('application'));
     }
@@ -1834,19 +1832,19 @@ class PrivateCoachingController extends Controller
         $lifeguards = DB::table('private_sub_member_detail')->where('type', 4)->where('application_id', $id)->get();
 
         $adminRole = Auth::guard('admin')->user()->admin_role;
-        $query_mark =  DB::table('private_mark_query_comment')->where('type',2)->where('application_no', $application->application_no);
-        $forward_data =  DB::table('private_mark_query_comment')->where('type',1)->where('application_no', $application->application_no);
-        if($adminRole == 2 || $adminRole == 3 || $adminRole == 9){
-            $forward_data->where('role_id',$adminRole);
-            $query_mark->where('role_id',$adminRole);
+        $query_mark =  DB::table('private_mark_query_comment')->where('type', 2)->where('application_no', $application->application_no);
+        $forward_data =  DB::table('private_mark_query_comment')->where('type', 1)->where('application_no', $application->application_no);
+        if ($adminRole == 2 || $adminRole == 3 || $adminRole == 9) {
+            $forward_data->where('role_id', $adminRole);
+            $query_mark->where('role_id', $adminRole);
         }
-        $forward_data=$forward_data->get();
+        $forward_data = $forward_data->get();
         $query_mark = $query_mark->get();
         return view('private_coaching.admin.swimming_pool_application_preview', [
             'application' => $application,
             'instructors' => $instructors,
             'lifeguards' => $lifeguards,
-            'query_mark'=> $query_mark,
+            'query_mark' => $query_mark,
             'forward_data' => $forward_data
 
         ]);
@@ -1868,23 +1866,23 @@ class PrivateCoachingController extends Controller
             $query_upload = moveFile('private_coaching_storage/query_upload', $req->query_upload);
             // $data['query_upload'] = $query_upload;
         };
-        if($req->value == 1){
+        if ($req->value == 1) {
             DB::table('private_coaching_application')->where('id', $req->application_id)->update($data);
-        }elseif($req->value == 2){
+        } elseif ($req->value == 2) {
             DB::table('private_gym_application')->where('id', $req->application_id)->update($data);
-        }elseif($req->value == 3){
+        } elseif ($req->value == 3) {
             DB::table('private_academies_application')->where('id', $req->application_id)->update($data);
-        }elseif($req->value == 4){
+        } elseif ($req->value == 4) {
             DB::table('private_swimming_pool_application')->where('id', $req->application_id)->update($data);
         }
         DB::table('private_mark_query_comment')->insert([
-                'application_no' => $req->application_no,
-                'comments' => $req->remark,
-                'doc' => $query_upload,
-                'type' => 2,
-                'created_by' => Auth::guard('admin')->user()->id,
-                'role_id' => Auth::guard('admin')->user()->admin_role,
-            ]);
+            'application_no' => $req->application_no,
+            'comments' => $req->remark,
+            'doc' => $query_upload,
+            'type' => 2,
+            'created_by' => Auth::guard('admin')->user()->id,
+            'role_id' => Auth::guard('admin')->user()->admin_role,
+        ]);
 
         return response()->json(['error' => false, 'msg' => 'Query Marked Successfully', 'url' => route(
             'admin_private_coaching_preview',
@@ -1895,40 +1893,38 @@ class PrivateCoachingController extends Controller
     public function private_forward(Request $req)
     {
 
-       
+
         $query_upload = '';
         if ($req->hasFile('verification_document')) {
             $query_upload = moveFile('private_coaching_storage/query_upload', $req->verification_document);
             // $data['query_upload'] = $query_upload;
         };
 
-        if(Auth::guard('admin')->user()->admin_role==3){
+        if (Auth::guard('admin')->user()->admin_role == 3) {
             $data = ['is_forwarded' => 1];
-        }else{
-              $data = ['is_forwarded' => 2];
+        } else {
+            $data = ['is_forwarded' => 2];
         }
 
-        if($req->form_type == 1){
+        if ($req->form_type == 1) {
             DB::table('private_coaching_application')->where('id', $req->id)->update($data);
-        }elseif($req->form_type == 2){
+        } elseif ($req->form_type == 2) {
             DB::table('private_gym_application')->where('id', $req->id)->update($data);
-        }elseif($req->form_type == 3){
+        } elseif ($req->form_type == 3) {
             DB::table('private_academies_application')->where('id', $req->id)->update($data);
-        }elseif($req->form_type == 4){
+        } elseif ($req->form_type == 4) {
             DB::table('private_swimming_pool_application')->where('id', $req->id)->update($data);
         }
 
         DB::table('private_mark_query_comment')->insert([
-                'application_no' => $req->application_no,
-                'comments' => $req->remark,
-                'doc' => $query_upload,
-                'type' => 1,
-                'created_by' => Auth::guard('admin')->user()->id,
-                'role_id' => Auth::guard('admin')->user()->admin_role,
-            ]);
+            'application_no' => $req->application_no,
+            'comments' => $req->remark,
+            'doc' => $query_upload,
+            'type' => 1,
+            'created_by' => Auth::guard('admin')->user()->id,
+            'role_id' => Auth::guard('admin')->user()->admin_role,
+        ]);
 
         return response()->json(['error' => false, 'msg' => 'Application Forwarded', 'url' => url('admin/private_coaching/dashboard')]);
     }
-
-    
 }

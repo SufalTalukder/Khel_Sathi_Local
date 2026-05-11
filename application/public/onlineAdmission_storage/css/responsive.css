@@ -1,0 +1,119 @@
+@media only screen and (max-width:768px) {
+
+	.moudlename .list-control {
+		margin-top: 9px;
+	}
+	.help {
+		top: 42%;
+	}
+	.profileicon {
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+	
+	.bg-light1 {
+        overflow-y: scroll !important;
+    }
+	footer {
+		padding: 0px 0;
+        position: relative;
+	}
+	.login-form {
+		width: 100%;
+	}
+	h1, .h1 {
+		font-size: 1rem;
+	}
+	h2, .h2 {
+		font-size: 1.1rem;
+	}
+	h3, .h3 {
+		font-size: 1rem;
+	}
+	h4, .h4 {
+		font-size: 1rem;
+	}
+	.help1 {
+		left: -75px;
+		padding: 4px 8px !important;
+		top:60%
+	}
+	.loginsidebar h3, .loginsidebar .h3 {
+        font-size: 0.8rem;
+    }
+	.loginsidebar h5{
+        font-size: 0.8rem;
+    }
+	.circle, .help, .item {
+		width: 60px;
+		height: 60px;
+	}
+	.header .dash-logo {
+		max-width: 45px;
+		margin: 15px auto;
+	}
+}
+@media only screen and (max-width:425px) {
+	.mobile-resp{
+		width: 60px;
+	}
+ 	.loginsidebar {
+		padding: 0.5em !important;
+		background-image: none;
+		background: linear-gradient(to bottom, #95d1fb 0%, #fff5d0 45%) !important;
+	}
+	.loginsidebar h3, .loginsidebar .h3 {
+        font-size: 0.8rem;
+    }
+	.loginsidebar h5{
+        font-size: 0.8rem;
+    }
+	.circle, .help, .item {
+		width: 45px;
+		height: 45px;
+		margin: 0 0 0 5px;
+		left: 0;
+		top: 25%;
+	}
+	.bg-light1 {
+        overflow-y: scroll !important;
+    }
+	footer {
+		height: auto;
+	}
+	.header .dash-logo {
+		max-width: 50px;
+        margin-top: 15px;
+	}
+	.moudlename {
+		font-size: 1rem;
+	}
+	.nav-text {
+		font-size: .7em;
+		white-space: normal;
+	}
+	.pageheader h4 .btn {
+		width: auto;
+		margin-top: 5px;
+	}
+    .navbar-toggler {
+        padding: 0.65rem 0.25rem 0;
+    }
+    .pagebody {
+        padding: 0px 5px 35px 5px;
+    }
+    .bhoechie-tab-menu .list-group-item {
+        font-weight: 600;
+        text-align: center;
+        font-size: 12px !important;
+        padding: 0.1rem;
+        line-height: 14px;
+    }
+    .bhoechie-tab-menu .list-group-item span {
+        float: none;
+        line-height: 36px;
+        margin-right: 0;
+        padding: 4px 6px;
+    }
+}

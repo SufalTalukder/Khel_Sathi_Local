@@ -1,0 +1,33 @@
+/* CSS Document */
+@import url('https://fonts.googleapis.com/css2?family=Fontdiner+Swanky&display=swap');
+
+.unselectable {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #fff;
+    display: block;
+    padding: 1px;
+    font-size: 1.3em !important;
+    text-align: center;
+    border: 1px solid #ced4da;
+    border-radius:.25rem;
+    letter-spacing: 10px;
+    font-family: 'Fontdiner Swanky', cursive;
+    background-image: url(../images/Captcha.png);
+    background-position: center;
+    color: #0000005e;
+    line-height: 35px;
+}
+
+.error_mess {
+    color: #ca3543 !important;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.login-form label {
+    display: inline-block;
+}

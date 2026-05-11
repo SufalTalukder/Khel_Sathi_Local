@@ -1,0 +1,115 @@
+/* changes done by anurag srart */
+.or {
+	text-align: center;
+	color: #333;
+	position: relative;
+	height: 30px;
+	margin: 15px auto;
+	font-size: 18px;
+}
+.or span {
+	display: block;
+	position: absolute;
+	right: 0px;
+	left: 0px;
+	margin: 0px auto;
+	background-color: #fff;
+	z-index: 2;
+	top: 0px;
+	width: auto;
+	border: 1px solid #e6e6e6;
+	border-radius: 3px;
+	padding: 6px;
+}
+.or span a {
+	color: #4e469d;
+	font-weight: bold;
+}
+.showfield {
+	display: block !important;
+}
+.hidefield {
+	display: none !important;
+}
+.or span a {
+	color: #4e469d;
+	font-weight: bold;
+}
+.hidefield {
+	display: none !important;
+}
+.showfield {
+	display: block !important;
+}
+.or span a {
+	color: #4e469d;
+	font-weight: bold;
+}
+.passlink {
+	display: none;
+}
+.or:after {
+	content: "";
+	height: 1px;
+	width: 100%;
+	position: absolute;
+	background-color: #eee;
+	z-index: 0;
+	right: 0px;
+	left: 0px;
+	margin: 0px auto;
+	top: 59%;
+}
+.enterotp {
+	display: none;
+}
+/* changes done by anurag end */
+@media only screen and (max-width:767px) {
+
+	.pagebody {
+		padding: 0px;
+		
+	  }
+
+	.moudlename .list-control {
+		margin-top: 9px;
+	}
+	.help {
+		top: 42%;
+	}
+	.profileicon {
+		position: absolute;
+		right: 0;
+		top: 7px;
+	}
+	.loginsidebar {
+		background: linear-gradient(to bottom, #8BC34A 0%, #f5f5f5 45%) !important;
+		padding-bottom: 3em;
+		margin-bottom: 2em;
+	}
+	.bg-light1 {
+		overflow-y: clip !important;
+	}
+	footer {
+		padding: 0px 0;
+	}
+	.login-form {
+		width: 100%;
+	}
+	h1, .h1 {
+		font-size: 1.2rem;
+	}
+	h2, .h2 {
+		font-size: 1.1rem;
+	}
+	h3, .h3 {
+		font-size: 1rem;
+	}
+	h4, .h4 {
+		font-size: 1rem;
+	}
+	.help1 {
+		left: -75px;
+		padding: 4px 8px !important;
+	}
+}

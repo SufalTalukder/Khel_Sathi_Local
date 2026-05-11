@@ -1,0 +1,143 @@
+﻿<!doctype html>
+<html>
+<head>
+    <title>Department of Sports</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="../images/favicon.png" />
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <link href="css/all.css" rel="stylesheet" />
+    <link href="css/datepicker.css" rel="stylesheet" media="all" />
+    <link href="css/custom_theme.css" rel="stylesheet" />
+    <link href="css/responsive.css" rel="stylesheet" />
+    <link href="css/default.css" rel="stylesheet" />
+    <link href="css/login.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-fluid">
+        <a href="#" title="Instruction" class="help" data-bs-toggle="modal" data-bs-target="#myModal">
+            <span class="item"> <img src="images/instruction.png" /> </span>
+            <div class="circle" style="animation-delay: 0s"></div>
+            <div class="circle" style="animation-delay: 1s"></div>
+            <div class="circle" style="animation-delay: 2s"></div>
+            <div class="circle" style="animation-delay: 3s"></div>
+        </a>
+        <div class="row">
+            <div class="col-md-6 loginsidebar">
+                <div class="row justify-content-center">
+                    <div class="col-4 col-lg-2 text-center mb-3"> <img src="images/logo.png" class="img-fluid"> </div>
+                    <div class="col-md-12 col-12 deptname">
+                        <h3 class="hd-org">Khel Sathi Portal/खेल साथी पोर्टल</h3>
+                        <h5>
+                            Department of Sports, Government of Uttar Pradesh<br>
+                            खेल विभाग, उत्तर प्रदेश सरकार
+                        </h5>
+                    </div>
+                    <div class="col-md-12 col-12 deptname">
+                        <h2 class="text-danger">
+                            Registration of Private Coaching Academies/Associations<br />निजी कोचिंग अकादमियों/एसोसिएशनों का पंजीकरण
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 bg-light1">
+                <div class="login-form">
+                    <h3 class="mb-0 text-center">Registration/पंजीकरण</h3>
+                    <div class="d-flex text-center justify-content-center align-items-center mt-2">
+                        <span class="fw-normal">
+                            <a href="login.html" class="fw-bold">
+                                Already Registered ? Click Here to Login<br>
+                                पहले से ही पंजीकृत ? लॉगिन करने हेतु यहां क्लिक करें
+                            </a>
+                        </span>
+                    </div>
+                    <form action="" id="preregistration" method="post" class="needs-validation px-5 mt-4" novalidate="">
+                        <div class="form-group">
+                            <label>1. Name of Association/एसोसिएशनों का नाम</label>
+                            <input type="text" class="form-control" id="fname" name="fname" onkeypress="" maxlength="255">
+                        </div>
+                        <div class="form-group">
+                            <label>2. Email ID/ईमेल आईडी</label>
+                            <input type="email" class="form-control" pattern="" id="email" name="email" maxlength="255">
+                        </div>
+                        <div class="form-group row ">
+                            <label>3. Mobile No./मोबाइल नंबर</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"> <span class="input-group-text" style="padding: 0.5rem 0.75rem;">+91</span> </div>
+                                <input type="text" name="mobile" class="form-control" pattern="[6-9][0-9]{9}$" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>4. 	Captcha/कैप्चा</label>
+                            <div class="row">
+                                <div class="col-lg-5"> <span id="captchaDiv"> <span class="unselectable" id="cp_refresh">14577</span> </span> </div>
+                                <div class="col-md-1 refresh">
+                                    <div class="cp_refresh"><a href="javascript:void(0)" title="Refresh Captcha"><span class="fas fa-redo"></span></a> </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control" id="captchaText" name="captcha">
+                                    <small class="text-muted"></small>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6 d-grid">
+                                <a href="otp.html" class="btn btn-outline-success "><i class="fa fa-user-plus"></i> Register <span class="fa fa-arrow-right"></span></a>
+                            </div>
+                            <div class="col-md-6 d-grid">
+                                <button type="reset" class="btn btn-outline-secondary "><i class="fa fa-undo"></i> Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="row">
+            <div class="col-md-8">
+                <ul class="foot-list">
+                    <li>Copyright © Department of Sports, Government of Uttar Pradesh / खेल विभाग, उत्तर प्रदेश सरकार</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul class="foot-list float-end">
+                    <li>
+                        Powered by <a href="http://otpl.co.in/" target="_blank">OmniNet</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Instructions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!--p><b>In order to ensure smooth and quick filling of the application form, please keep the following ready:</b></p>
+                    <ol>
+                      <li>A valid mobile number with Indian SIM card</li>
+                      <li>A valid email address</li>
+                      <li>A digital photograph or scanned photograph of the child seeking admission</li>
+                      <li>A scan copy of the child’s birth certificate</li>
+                    </ol-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery-min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/datepicker.js"></script>
+    <script type="text/javascript" src="js/datepicker.en.js"></script>
+    <script>
+        $(".toggle-password").click(function () { $(this).toggleClass("fa-eye fa-eye-slash"); var input = $($(this).attr("toggle")); if (input.attr("type") == "password") { input.attr("type", "text"); } else { input.attr("type", "password"); } });
+    </script>
+</body>
+</html>
